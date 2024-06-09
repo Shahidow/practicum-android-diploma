@@ -6,7 +6,7 @@ import ru.practicum.android.diploma.data.network.HeadHunterApi
 
 class VacancyRepository(private val api: HeadHunterApi) {
 
-    private val token = "Bearer APPLRO2GGE350U5M54G5SAOIA52SMR6DH2RDCT4AH2I6O59JEOE6GETL8R0QJE2J"
+    private val token = "Bearer TOKEN"
 
     suspend fun getVacancies(filters: Map<String, String>): List<Vacancy> {
         val response = api.getVacancies(token, filters)
