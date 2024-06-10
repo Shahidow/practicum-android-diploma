@@ -2,19 +2,16 @@ package ru.practicum.android.diploma.data.repository
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import ru.practicum.android.diploma.data.network.HeadHunterApi
 import java.io.IOException
 
 class VacancyRepository(private val api: HeadHunterApi) {
 
-    private val token = "Bearer TOKEN"
-    private val SUCCESS_CODE = 200
-    private val ERROR_CODE = 400
-
     suspend fun getVacancies(filters: Map<String, String>): NetworkResponse {
         return withContext(Dispatchers.IO) {
             try {
-                val response = api.getVacancies(token, filters)
+                val response = api.getVacancies(TOKEN, filters)
                 if (response.isSuccessful) {
                     NetworkResponse(response.body()?.items ?: emptyList(), SUCCESS_CODE)
                 } else {
@@ -23,8 +20,8 @@ class VacancyRepository(private val api: HeadHunterApi) {
                 }
             } catch (ex: IOException) {
                 NetworkResponse(emptyList(), ERROR_CODE, "Network error: ${ex.message}")
-            } catch (ex: Exception) {
-                NetworkResponse(emptyList(), ERROR_CODE, "Unexpected error: ${ex.message}")
+            } catch (ex: HttpException) {
+                NetworkResponse(emptyList(), ERROR_CODE, "HTTP error: ${ex.message}")
             }
         }
     }
@@ -32,7 +29,7 @@ class VacancyRepository(private val api: HeadHunterApi) {
     suspend fun getVacancyDetails(id: String): NetworkResponse {
         return withContext(Dispatchers.IO) {
             try {
-                val response = api.getVacancyDetails(token, id)
+                val response = api.getVacancyDetails(TOKEN, id)
                 if (response.isSuccessful) {
                     NetworkResponse(response.body() ?: throw NotFoundException("Vacancy not found"), SUCCESS_CODE)
                 } else {
@@ -41,10 +38,16 @@ class VacancyRepository(private val api: HeadHunterApi) {
                 }
             } catch (ex: IOException) {
                 NetworkResponse(null, ERROR_CODE, "Network error: ${ex.message}")
-            } catch (ex: Exception) {
-                NetworkResponse(null, ERROR_CODE, "Unexpected error: ${ex.message}")
+            } catch (ex: HttpException) {
+                NetworkResponse(null, ERROR_CODE, "HTTP error: ${ex.message}")
             }
         }
+    }
+
+    companion object {
+        private const val TOKEN = "Bearer TOKEN"
+        private const val SUCCESS_CODE = 200
+        private const val ERROR_CODE = 400
     }
 }
 
