@@ -24,5 +24,3 @@ interface HeadHunterApi {
         @Path("id") id: String
     ): Response<VacancyDetails>
 }
-
-

@@ -8,4 +8,3 @@ interface HeadHunterNetworkClient {
     suspend fun getVacancies(filters: Map<String, String>): Response<VacancyResponse>
     suspend fun getVacancy(id: String): Response<VacancyDetails>
 }
-
