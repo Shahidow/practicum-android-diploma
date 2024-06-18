@@ -28,17 +28,6 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
         return binding.root
     }
 
-    /*  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-          super.onViewCreated(view, savedInstanceState)
-
-          vacancyAdapter = VacancyAdapter()
-          vacancyAdapter?.setInItemVacancyClickListener(this)
-          binding.recyclerviewVacancy.layoutManager = LinearLayoutManager(context)
-          binding.recyclerviewVacancy.adapter = vacancyAdapter
-
-          searchViewModel.vacancyList.observe(viewLifecycleOwner) { vacancyAdapter?.setVacancyList(it) }
-      }
-  */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
