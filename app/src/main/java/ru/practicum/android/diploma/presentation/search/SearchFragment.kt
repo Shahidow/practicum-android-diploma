@@ -71,11 +71,13 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
                         setStateEmptyResult()
                     }
 
-                    SateIsData -> {
+                    StateIsData -> {
                         setSateIsData(it)
                     }
 
-                    else -> {}
+                    else -> {
+                    // это пустой метод
+                    }
                 }
             }
         }
