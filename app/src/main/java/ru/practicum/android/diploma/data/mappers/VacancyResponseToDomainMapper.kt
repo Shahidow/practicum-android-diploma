@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.data.mappers
 
 import ru.practicum.android.diploma.data.dto.Vacancy
 import ru.practicum.android.diploma.data.dto.VacancyDetails
-import ru.practicum.android.diploma.domain.search.models.DomainVacancy as DomainVacancy
+import ru.practicum.android.diploma.domain.search.models.DomainVacancy
 
 class VacancyResponseToDomainMapper {
 

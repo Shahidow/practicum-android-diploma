@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.domain.vacancy.GetVacancyDetailsInteractor
-import ru.practicum.android.diploma.domain.search.models.DomainVacancy
 import ru.practicum.android.diploma.domain.favorites.VacancyViewState
+import ru.practicum.android.diploma.domain.search.models.DomainVacancy
+import ru.practicum.android.diploma.domain.vacancy.GetVacancyDetailsInteractor
 
 class VacancyViewModel(
     private val getVacancyDetailsInteractor: GetVacancyDetailsInteractor,
@@ -33,35 +33,35 @@ class VacancyViewModel(
             }
         }
     }
-/*
-    fun insertFavoriteVacancy() {
-        if (currentVacancy != null) {
+    /*
+        fun insertFavoriteVacancy() {
+            if (currentVacancy != null) {
+                viewModelScope.launch {
+                    favoritesVacancyInteractor.insertFavoriteVacancy(currentVacancy!!)
+                }
+                getFavoriteIds()
+            }
+        }
+
+        fun deleteFavoriteVacancy() {
+            if (currentVacancy != null) {
+                viewModelScope.launch {
+                    favoritesVacancyInteractor.deleteFavoriteVacancy(currentVacancy!!)
+                }
+                getFavoriteIds()
+            }
+        }
+
+        fun getFavoriteIds() {
             viewModelScope.launch {
-                favoritesVacancyInteractor.insertFavoriteVacancy(currentVacancy!!)
-            }
-            getFavoriteIds()
-        }
-    }
-
-    fun deleteFavoriteVacancy() {
-        if (currentVacancy != null) {
-            viewModelScope.launch {
-                favoritesVacancyInteractor.deleteFavoriteVacancy(currentVacancy!!)
-            }
-            getFavoriteIds()
-        }
-    }
-
-    fun getFavoriteIds() {
-        viewModelScope.launch {
-            val favoriteIdList = favoritesVacancyInteractor.getFavoriteIds()
-            if (favoriteIdList.contains(currentVacancy?.vacancyId)) {
-                _vacancyScreenState.postValue(VacancyViewState.VacancyIsFavorite)
-            } else {
-                _vacancyScreenState.postValue(VacancyViewState.VacancyIsNotFavorite)
+                val favoriteIdList = favoritesVacancyInteractor.getFavoriteIds()
+                if (favoriteIdList.contains(currentVacancy?.vacancyId)) {
+                    _vacancyScreenState.postValue(VacancyViewState.VacancyIsFavorite)
+                } else {
+                    _vacancyScreenState.postValue(VacancyViewState.VacancyIsNotFavorite)
+                }
             }
         }
-    }
 
- */
+     */
 }

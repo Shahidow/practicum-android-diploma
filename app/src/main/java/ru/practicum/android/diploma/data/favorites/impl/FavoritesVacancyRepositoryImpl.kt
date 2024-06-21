@@ -26,6 +26,7 @@ class FavoritesVacancyRepositoryImpl(
             }
         })
     }
+
     override suspend fun getOneFavoriteVacancy(vacancyId: String): DomainVacancy {
         TODO()
     }
