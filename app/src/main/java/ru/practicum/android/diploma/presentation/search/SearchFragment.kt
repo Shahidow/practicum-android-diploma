@@ -23,13 +23,13 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
     private val vm by viewModel<SearchViewModel>()
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
-
     private var vacancyAdapter: VacancyAdapter? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -46,33 +46,12 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
 
         vm.trackListLiveData.observe(viewLifecycleOwner) {
             when (it) {
-                is SearchState.NoInternet -> {
-                    setStateNetworkError()
-                }
-
-                is SearchState.Error -> {
-                    setStateServerError()
-                }
-
-                is SearchState.Default -> {
-                    setStateDefault()
-                }
-
-                is SearchState.Loading -> {
-                    setStateIsLoading()
-                }
-
-                is SearchState.NoResults -> {
-                    setStateEmptyResult()
-                }
-
-                is SearchState.Success -> {
-                    setSateIsData(it.vacancies)
-                }
-
-                else -> {
-                    // это пустой метод
-                }
+                is SearchState.NoInternet -> setStateNetworkError()
+                is SearchState.Error -> setStateServerError()
+                is SearchState.Default -> setStateDefault()
+                is SearchState.Loading -> setStateIsLoading()
+                is SearchState.NoResults -> setStateEmptyResult()
+                is SearchState.Success -> setSateIsData(it.vacancies)
             }
         }
 
@@ -99,13 +78,8 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
 
         vacancyAdapter = VacancyAdapter()
         vacancyAdapter?.setInItemVacancyClickListener(this)
-
         // binding.searchRecyclerView = LinearLayoutManager(context)
-
         binding.searchRecyclerView.adapter = vacancyAdapter
-
-        // searchViewModel.vacancyList.observe(viewLifecycleOwner) { vacancyAdapter?.setVacancyList(it) }
-
         binding.filterButton.setOnClickListener {
             findNavController().navigate(R.id.action_searchFragment_to_filtrationFragment)
         }
@@ -123,78 +97,90 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
     }
 
     private fun setStateNetworkError() {
-        binding.foundResultsMessage.visibility = View.GONE
-        binding.searchRecyclerView.visibility = View.GONE
-        binding.searchProgressBar.visibility = View.GONE
-        binding.searchPlaceholderLayout.visibility = View.VISIBLE
-        Glide.with(this)
-            .load(R.drawable.placeholder_skull)
-            .centerCrop()
-            .into(binding.searchPlaceholderImage)
-        binding.searchPlaceholderMessage.text = this.getString(R.string.no_internet_connection)
+        binding.apply {
+            binding.foundResultsMessage.isVisible = false
+            binding.searchRecyclerView.isVisible = false
+            binding.searchProgressBar.isVisible = false
+            binding.searchPlaceholderLayout.isVisible = true
+            binding.searchPlaceholderMessage.text = this@SearchFragment.getString(R.string.no_internet_connection)
+            Glide.with(this@SearchFragment)
+                .load(R.drawable.placeholder_skull)
+                .centerCrop()
+                .into(searchPlaceholderImage)
+        }
     }
 
     private fun setStateServerError() {
-        binding.foundResultsMessage.visibility = View.GONE
-        binding.searchRecyclerView.visibility = View.GONE
-        binding.searchProgressBar.visibility = View.GONE
-        binding.searchPlaceholderLayout.visibility = View.VISIBLE
-        Glide.with(this)
-            .load(R.drawable.placeholder_server_error_towel)
-            .centerCrop()
-            .into(binding.searchPlaceholderImage)
-        binding.searchPlaceholderMessage.text = this.getString(R.string.server_error)
+        binding.apply {
+            foundResultsMessage.isVisible = false
+            searchRecyclerView.isVisible = false
+            searchProgressBar.isVisible = false
+            searchPlaceholderLayout.isVisible = true
+            searchPlaceholderMessage.text = this@SearchFragment.getString(R.string.server_error)
+            Glide.with(this@SearchFragment)
+                .load(R.drawable.placeholder_server_error_towel)
+                .centerCrop()
+                .into(searchPlaceholderImage)
+        }
     }
 
     private fun setStateDefault() {
-        binding.foundResultsMessage.visibility = View.GONE
-        binding.searchRecyclerView.visibility = View.GONE
-        binding.searchProgressBar.visibility = View.GONE
-        binding.searchPlaceholderLayout.visibility = View.VISIBLE
-        Glide.with(this)
-            .load(R.drawable.placeholder_man_search)
-            .centerCrop()
-            .into(binding.searchPlaceholderImage)
-        binding.searchPlaceholderMessage.text = ""
+        binding.apply {
+            foundResultsMessage.isVisible = false
+            searchRecyclerView.isVisible = false
+            searchProgressBar.isVisible = false
+            searchPlaceholderLayout.isVisible = true
+            searchPlaceholderMessage.text = ""
+            Glide.with(this@SearchFragment)
+                .load(R.drawable.placeholder_man_search)
+                .centerCrop()
+                .into(searchPlaceholderImage)
+        }
     }
 
     private fun setStateIsLoading() {
-        binding.foundResultsMessage.visibility = View.GONE
-        binding.searchRecyclerView.visibility = View.GONE
-        binding.searchProgressBar.visibility = View.VISIBLE
-        binding.searchPlaceholderLayout.visibility = View.GONE
+        binding.apply {
+            foundResultsMessage.isVisible = false
+            searchRecyclerView.isVisible = false
+            searchPlaceholderLayout.isVisible = false
+            searchProgressBar.isVisible = true
+        }
     }
 
     private fun setStateEmptyResult() {
-        binding.foundResultsMessage.visibility = View.VISIBLE
-        binding.searchRecyclerView.visibility = View.GONE
-        binding.searchProgressBar.visibility = View.GONE
-        binding.searchPlaceholderLayout.visibility = View.VISIBLE
-        Glide.with(this)
-            .load(R.drawable.placeholder_cat)
-            .centerCrop()
-            .into(binding.searchPlaceholderImage)
-        binding.searchPlaceholderMessage.text = this.getString(R.string.count_get_list_of_vacancies)
-        binding.foundResultsMessage.text = this.getString(R.string.no_such_vacancies)
+        binding.apply {
+            searchRecyclerView.isVisible = false
+            searchProgressBar.isVisible = false
+            foundResultsMessage.isVisible = true
+            searchPlaceholderLayout.isVisible = true
+            searchPlaceholderMessage.text = this@SearchFragment.getString(R.string.count_get_list_of_vacancies)
+            foundResultsMessage.text = this@SearchFragment.getString(R.string.no_such_vacancies)
+            Glide.with(this@SearchFragment)
+                .load(R.drawable.placeholder_cat)
+                .centerCrop()
+                .into(searchPlaceholderImage)
+        }
     }
 
     private fun setSateIsData(domainVacancyList: List<DomainVacancy>) {
-        binding.foundResultsMessage.visibility = View.VISIBLE
-        binding.searchRecyclerView.visibility = View.VISIBLE
-        binding.searchProgressBar.visibility = View.GONE
-        binding.searchPlaceholderLayout.visibility = View.GONE
-        Glide.with(this)
-            .load(R.drawable.placeholder_cat)
-            .centerCrop()
-            .into(binding.searchPlaceholderImage)
-        binding.searchPlaceholderMessage.text = this.getString(R.string.count_get_list_of_vacancies)
-        binding.foundResultsMessage.text = java.lang.String(
-            this.getString(R.string.found)
-                + whitespace
-                + domainVacancyList.size.toString()
-                + whitespace
-                + this.getString(R.string.vacancy)
-        )
+        binding.apply {
+            foundResultsMessage.isVisible = true
+            searchRecyclerView.isVisible = true
+            searchProgressBar.isVisible = false
+            searchPlaceholderLayout.isVisible = false
+            searchPlaceholderMessage.text = this@SearchFragment.getString(R.string.count_get_list_of_vacancies)
+            foundResultsMessage.text = java.lang.String(
+                this@SearchFragment.getString(R.string.found)
+                    + whitespace
+                    + domainVacancyList.size.toString()
+                    + whitespace
+                    + this@SearchFragment.getString(R.string.vacancy)
+            )
+            Glide.with(this@SearchFragment)
+                .load(R.drawable.placeholder_cat)
+                .centerCrop()
+                .into(searchPlaceholderImage)
+        }
         vacancyAdapter?.setVacancyList(ArrayList(domainVacancyList))
     }
 

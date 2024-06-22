@@ -123,8 +123,15 @@ class VacancyFragment : Fragment() {
 
     private fun setJobDetails(vacancy: DomainVacancy) {
         binding.jobTitle.text = vacancy.name
-        binding.experience.text = vacancy.experience
-        binding.employmentType.text = vacancy.employment
+        binding.experience.text = vacancy.experience ?: "Не указан"
+        binding.employmentType.text = when {
+            vacancy.employment != null && vacancy.schedule != null ->
+                "${vacancy.employment}, ${vacancy.schedule}"
+
+            vacancy.employment == null -> "${vacancy.schedule}"
+            vacancy.schedule == null -> "${vacancy.employment}"
+            else -> ""
+        }
         binding.jobSalaryAmount.text = when {
             vacancy.salaryFrom != null && vacancy.salaryTo != null ->
                 "от ${vacancy.salaryFrom} до ${vacancy.salaryTo} ${vacancy.salaryCurrency}"
