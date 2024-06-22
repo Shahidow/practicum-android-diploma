@@ -5,13 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.favorites.FavoritesVacancyInteractor
 import ru.practicum.android.diploma.domain.favorites.VacancyViewState
 import ru.practicum.android.diploma.domain.search.models.DomainVacancy
 import ru.practicum.android.diploma.domain.vacancy.GetVacancyDetailsInteractor
 
 class VacancyViewModel(
     private val getVacancyDetailsInteractor: GetVacancyDetailsInteractor,
-    // private val favoritesVacancyInteractor: FavoritesVacancyInteractor
+    private val favoritesVacancyInteractor: FavoritesVacancyInteractor
 ) : ViewModel() {
 
     private val _vacancyScreenState = MutableLiveData<VacancyViewState>()
@@ -27,41 +28,38 @@ class VacancyViewModel(
             result.onSuccess {
                 currentDomainVacancy = it
                 _vacancyScreenState.postValue(VacancyViewState.VacancyDataDetail(it))
-                // getFavoriteIds()
+                getFavoriteIds()
             }.onFailure {
                 // Ошибка
             }
         }
     }
-    /*
-        fun insertFavoriteVacancy() {
-            if (currentVacancy != null) {
-                viewModelScope.launch {
-                    favoritesVacancyInteractor.insertFavoriteVacancy(currentVacancy!!)
-                }
-                getFavoriteIds()
-            }
-        }
-
-        fun deleteFavoriteVacancy() {
-            if (currentVacancy != null) {
-                viewModelScope.launch {
-                    favoritesVacancyInteractor.deleteFavoriteVacancy(currentVacancy!!)
-                }
-                getFavoriteIds()
-            }
-        }
-
-        fun getFavoriteIds() {
+    fun insertFavoriteVacancy() {
+        if (currentDomainVacancy != null) {
             viewModelScope.launch {
-                val favoriteIdList = favoritesVacancyInteractor.getFavoriteIds()
-                if (favoriteIdList.contains(currentVacancy?.vacancyId)) {
-                    _vacancyScreenState.postValue(VacancyViewState.VacancyIsFavorite)
-                } else {
-                    _vacancyScreenState.postValue(VacancyViewState.VacancyIsNotFavorite)
-                }
+                favoritesVacancyInteractor.insertFavoriteVacancy(currentDomainVacancy!!)
+            }
+            getFavoriteIds()
+        }
+    }
+
+    fun deleteFavoriteVacancy() {
+        if (currentDomainVacancy != null) {
+            viewModelScope.launch {
+                favoritesVacancyInteractor.deleteFavoriteVacancy(currentDomainVacancy!!)
+            }
+            getFavoriteIds()
+        }
+    }
+
+    fun getFavoriteIds() {
+        viewModelScope.launch {
+            val favoriteIdList = favoritesVacancyInteractor.getFavoriteIds()
+            if (favoriteIdList.contains(currentDomainVacancy?.vacancyId)) {
+                _vacancyScreenState.postValue(VacancyViewState.VacancyIsFavorite)
+            } else {
+                _vacancyScreenState.postValue(VacancyViewState.VacancyIsNotFavorite)
             }
         }
-
-     */
+    }
 }
