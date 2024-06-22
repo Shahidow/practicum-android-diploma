@@ -11,14 +11,14 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.db.VacancyConverter
+import ru.practicum.android.diploma.data.favorites.FavoritesVacancyRepository
+import ru.practicum.android.diploma.data.favorites.impl.FavoritesVacancyRepositoryImpl
 import ru.practicum.android.diploma.data.network.HeadHunterApi
 import ru.practicum.android.diploma.data.network.HeadHunterNetworkClient
 import ru.practicum.android.diploma.data.network.HeadHunterRetrofitNetworkClient
-import ru.practicum.android.diploma.data.favorites.impl.FavoritesVacancyRepositoryImpl
+import ru.practicum.android.diploma.data.search.SearchRepository
 import ru.practicum.android.diploma.data.search.impl.SearchRepositoryImpl
 import ru.practicum.android.diploma.data.vacancy.VacancyRepository
-import ru.practicum.android.diploma.data.search.SearchRepository
-import ru.practicum.android.diploma.data.favorites.FavoritesVacancyRepository
 import ru.practicum.android.diploma.util.BASE_URL
 import ru.practicum.android.diploma.util.Debounce
 import ru.practicum.android.diploma.util.SHARED_PREFERENCES
