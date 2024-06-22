@@ -3,11 +3,8 @@ package ru.practicum.android.diploma.data.search.impl
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import androidx.core.content.ContextCompat.getString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.dto.VacancyRequest
 import ru.practicum.android.diploma.data.mappers.VacancyResponseToDomainMapper
 import ru.practicum.android.diploma.data.network.HeadHunterNetworkClient
@@ -46,16 +43,18 @@ class SearchRepositoryImpl(
 
     private fun isConnected(): Boolean {
         val connectivityManager = context.getSystemService(
-            Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            Context.CONNECTIVITY_SERVICE
+        ) as ConnectivityManager
         val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        var isConnected = false
         if (capabilities != null) {
             when {
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> return true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> return true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> return true
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> isConnected = true
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> isConnected = true
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> isConnected = true
             }
         }
-        return false
+        return isConnected
     }
 
 }

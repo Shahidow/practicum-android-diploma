@@ -91,9 +91,11 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (dy > 0) {
-                    val pos = (binding.searchRecyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    val pos =
+                        (binding.searchRecyclerView.layoutManager as LinearLayoutManager)
+                            .findLastVisibleItemPosition()
                     val itemsCount = vacancyAdapter!!.itemCount
-                    if (pos >= itemsCount-1) {
+                    if (pos >= itemsCount - 1) {
                         searchViewModel.onLastItemReached()
                     }
                 }

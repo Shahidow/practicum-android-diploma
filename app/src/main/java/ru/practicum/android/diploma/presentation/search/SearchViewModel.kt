@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.presentation.search
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -55,7 +54,7 @@ class SearchViewModel(private val debounce: Debounce, private val searchInteract
             searchInteractor
                 .searchVacancies(text, currentPage)
                 .collect { pair -> processResult(pair.first, pair.second) }
-            maxPages = searchInteractor.pages?: 0
+            maxPages = searchInteractor.pages ?: 0
         }
     }
 
@@ -68,11 +67,12 @@ class SearchViewModel(private val debounce: Debounce, private val searchInteract
                 searchState.postValue(SearchState.Success(vacanciesList, searchInteractor.foundItems!!))
             }
         } else if (errorCode != null) {
-            Log.i("123", errorCode.toString())
             when (errorCode) {
                 INTERNET_ERROR -> {
                     searchState.postValue(SearchState.NoInternet)
-                } else -> {
+                }
+
+                else -> {
                     searchState.postValue(SearchState.Error(R.string.server_error.toString()))
                 }
             }
