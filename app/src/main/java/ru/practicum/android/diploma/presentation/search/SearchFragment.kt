@@ -193,13 +193,13 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
             searchProgressBar.isVisible = false
             searchPlaceholderLayout.isVisible = false
             searchPlaceholderMessage.text = this@SearchFragment.getString(R.string.count_get_list_of_vacancies)
-            foundResultsMessage.text = java.lang.String(
-                this@SearchFragment.getString(R.string.found)
-                    + whitespace
-                    + totalVacancies.toString()
-                    + whitespace
-                    + this@SearchFragment.getString(R.string.vacancy)
-            )
+            foundResultsMessage.text = buildString {
+                append(this@SearchFragment.getString(R.string.found))
+                append(WHITESPACE)
+                append(totalVacancies.toString())
+                append(WHITESPACE)
+                append(this@SearchFragment.getString(R.string.vacancy))
+            }
             Glide.with(this@SearchFragment)
                 .load(R.drawable.placeholder_cat)
                 .centerCrop()
@@ -213,7 +213,7 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
     }
 
     companion object {
-        const val whitespace = " "
+        const val WHITESPACE = " "
     }
 
 }
