@@ -162,8 +162,8 @@ class VacancyFragment : Fragment() {
     }
 
     private fun setFavoriteButton() {
-        // binding.favoriteButtonOff.setOnClickListener { viewModel?.insertFavoriteVacancy() }
-        // binding.favoriteButtonOn.setOnClickListener { viewModel?.deleteFavoriteVacancy() }
+        binding.favoriteButtonOff.setOnClickListener { viewModel?.insertFavoriteVacancy() }
+        binding.favoriteButtonOn.setOnClickListener { viewModel?.deleteFavoriteVacancy() }
     }
 
     private fun setContactDetails(vacancy: DomainVacancy) {
