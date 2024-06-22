@@ -7,4 +7,5 @@ sealed class VacancyViewState {
     object VacancyIsNotFavorite : VacancyViewState()
     data class VacancyDataDetail(val domainVacancy: DomainVacancy) : VacancyViewState()
     object VacancyLoading : VacancyViewState()
+    object Error : VacancyViewState()
 }

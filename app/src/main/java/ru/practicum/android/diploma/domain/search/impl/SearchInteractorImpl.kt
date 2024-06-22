@@ -11,7 +11,7 @@ class SearchInteractorImpl(private val repository: SearchRepository) : SearchInt
     override var currentPage: Int? = null
     override var foundItems: Int? = null
     override var pages: Int? = null
-    override fun searchVacancies(text: String, page: Int): Flow<Pair<List<DomainVacancy>?, String?>> {
+    override fun searchVacancies(text: String, page: Int): Flow<Pair<List<DomainVacancy>?, Int?>> {
         return repository.searchVacancies(text, page).map { result ->
             when (result) {
                 is Resource.Success -> {
@@ -22,7 +22,7 @@ class SearchInteractorImpl(private val repository: SearchRepository) : SearchInt
                 }
 
                 is Resource.Error -> {
-                    Pair(null, result.message)
+                    Pair(null, result.resultCode)
                 }
             }
         }

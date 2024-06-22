@@ -30,7 +30,7 @@ class VacancyViewModel(
                 _vacancyScreenState.postValue(VacancyViewState.VacancyDataDetail(it))
                 getFavoriteIds()
             }.onFailure {
-                // Ошибка
+                _vacancyScreenState.postValue(VacancyViewState.Error)
             }
         }
     }

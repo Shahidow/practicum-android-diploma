@@ -70,7 +70,7 @@
 
     <!-- Placeholder for Error or No Internet -->
     <LinearLayout
-        android:id="@+id/placeholder"
+        android:id="@+id/errorPlaceholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
