@@ -74,7 +74,7 @@ class VacancyFragment : Fragment() {
 
     private fun setupShareButton() {
         binding.shareButton.setOnClickListener {
-            viewModel.currentVacancy?.let { vacancy ->
+            viewModel.currentDomainVacancy?.let { vacancy ->
                 val shareIntent = Intent().apply {
                     action = Intent.ACTION_SEND
                     putExtra(Intent.EXTRA_TEXT, "https://hh.ru/vacancy/${vacancy.vacancyId}")
@@ -87,7 +87,7 @@ class VacancyFragment : Fragment() {
 
     private fun setupEmailButton() {
         binding.includeContacts.eMail.setOnClickListener {
-            viewModel.currentVacancy?.contactEmail?.let { email ->
+            viewModel.currentDomainVacancy?.contactEmail?.let { email ->
                 sendEmail(email)
             }
         }
@@ -104,7 +104,7 @@ class VacancyFragment : Fragment() {
 
     private fun setupPhoneButton() {
         binding.includeContacts.phone.setOnClickListener {
-            viewModel.currentVacancy?.contactPhoneNumbers?.firstOrNull()?.let { phone ->
+            viewModel.currentDomainVacancy?.contactPhoneNumbers?.firstOrNull()?.let { phone ->
                 makePhoneCall(phone)
             }
         }
@@ -165,6 +165,10 @@ class VacancyFragment : Fragment() {
             .into(binding.includeCompany.companyLogo)
     }
 
+    private fun setFavoriteButton() {
+        binding.favoriteButtonOff.setOnClickListener { viewModel?.insertFavoriteVacancy() }
+        binding.favoriteButtonOn.setOnClickListener { viewModel?.deleteFavoriteVacancy() }
+    }
     private fun setJobDescriptionAndSkills(vacancy: DomainVacancy) {
         binding.jobDescription.text = Html.fromHtml(vacancy.description, Html.FROM_HTML_MODE_LEGACY)
         binding.keySkills.text = vacancy.skills.joinToString("\n")

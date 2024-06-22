@@ -24,11 +24,11 @@ staticAnalysis-detektLibraries = { module = "io.gitlab.arturbosch.detekt:detekt-
 staticAnalysis-detektTwitterComposeRules = { module = "com.twitter.compose.rules:detekt", version.ref = "detektTwitterComposeRules" }
 
 # AndroidX
-androidX-core = "androidx.core:core-ktx:1.12.0"
-androidX-appCompat = "androidx.appcompat:appcompat:1.6.1"
+androidX-core = "androidx.core:core-ktx:1.13.1"
+androidX-appCompat = "androidx.appcompat:appcompat:1.7.0"
 
 # UI layer libraries
-ui-material = "com.google.android.material:material:1.10.0"
+ui-material = "com.google.android.material:material:1.12.0"
 ui-constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 
 # Unit tests
@@ -51,18 +51,18 @@ retrofit-converterGson = "com.squareup.retrofit2:converter-gson:2.9.0"
 gson = "com.google.code.gson:gson:2.10.1"
 
 # Coroutines
-coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1"
+coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
 
 # Koin
-koin-android = "io.insert-koin:koin-android:3.3.0"
+koin-android = "io.insert-koin:koin-android:3.5.3"
 
 # Fragment
-fragment-ktx = "androidx.fragment:fragment-ktx:1.7.1"
+fragment-ktx = "androidx.fragment:fragment-ktx:1.8.0"
 
 # Glide
-glide-material = "com.google.android.material:material:1.6.1"
-glide = "com.github.bumptech.glide:glide:4.14.2"
-glide-compiler = "com.github.bumptech.glide:compiler:4.14.2"
+glide-material = "com.google.android.material:material:1.12.0"
+glide = "com.github.bumptech.glide:glide:4.16.0"
+glide-compiler = "com.github.bumptech.glide:compiler:4.15.0"
 
 # Navigation Graph
 navigation-fragment = "androidx.navigation:navigation-fragment-ktx:2.7.7"
