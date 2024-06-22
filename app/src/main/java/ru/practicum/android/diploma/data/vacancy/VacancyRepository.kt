@@ -7,8 +7,8 @@ import retrofit2.HttpException
 import ru.practicum.android.diploma.data.dto.VacancyDetails
 import ru.practicum.android.diploma.data.mappers.VacancyResponseToDomainMapper
 import ru.practicum.android.diploma.data.network.HeadHunterNetworkClient
+import ru.practicum.android.diploma.domain.search.models.DomainVacancy
 import java.io.IOException
-import ru.practicum.android.diploma.domain.search.models.DomainVacancy as DomainVacancy
 
 class VacancyRepository(
     private val networkClient: HeadHunterNetworkClient,

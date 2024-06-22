@@ -14,6 +14,7 @@ class SearchViewModel(private val debounce: Debounce, private val searchInteract
     private var searchText: String? = null
     private var searchState = MutableLiveData<SearchState>()
     val trackListLiveData: LiveData<SearchState> = searchState
+
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }

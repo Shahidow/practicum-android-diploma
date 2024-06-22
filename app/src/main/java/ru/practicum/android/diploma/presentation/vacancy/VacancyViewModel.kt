@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.favorites.FavoritesVacancyInteractor
-import ru.practicum.android.diploma.domain.vacancy.GetVacancyDetailsInteractor
-import ru.practicum.android.diploma.domain.search.models.DomainVacancy
 import ru.practicum.android.diploma.domain.favorites.VacancyViewState
+import ru.practicum.android.diploma.domain.search.models.DomainVacancy
+import ru.practicum.android.diploma.domain.vacancy.GetVacancyDetailsInteractor
 
 class VacancyViewModel(
     private val getVacancyDetailsInteractor: GetVacancyDetailsInteractor,
@@ -34,7 +34,6 @@ class VacancyViewModel(
             }
         }
     }
-
     fun insertFavoriteVacancy() {
         if (currentVacancy != null) {
             viewModelScope.launch {
@@ -42,8 +41,6 @@ class VacancyViewModel(
                 getFavoriteIds()
             }
         }
-    }
-
     fun deleteFavoriteVacancy() {
         if (currentVacancy != null) {
             viewModelScope.launch {
@@ -51,8 +48,6 @@ class VacancyViewModel(
                 getFavoriteIds()
             }
         }
-    }
-
     fun getFavoriteIds() {
         viewModelScope.launch {
             val favoriteIdList = favoritesVacancyInteractor.getFavoriteIds()
@@ -63,5 +58,4 @@ class VacancyViewModel(
             }
         }
     }
-
 }

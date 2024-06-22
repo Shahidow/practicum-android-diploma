@@ -26,6 +26,7 @@ class FavoritesVacancyRepositoryImpl(
             }
         })
     }
+
     override suspend fun getOneFavoriteVacancy(vacancyId: String): DomainVacancy {
         val vacancyEntity = appDatabase.favoriteVacancyDao().getVacancyById(vacancyId)
         return vacancyConverter.map(vacancyEntity)
