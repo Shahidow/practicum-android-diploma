@@ -16,6 +16,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.domain.favorites.VacancyViewState
 import ru.practicum.android.diploma.domain.search.models.DomainVacancy
+import ru.practicum.android.diploma.util.VACANCY_KEY
 
 class VacancyFragment : Fragment() {
 
@@ -144,7 +145,7 @@ class VacancyFragment : Fragment() {
 
             vacancy.salaryFrom != null -> "от ${vacancy.salaryFrom} ${vacancy.salaryCurrency}"
             vacancy.salaryTo != null -> "до ${vacancy.salaryTo} ${vacancy.salaryCurrency}"
-            else -> "зарплата не указана"
+            else -> R.string.salary_is_not_specified.toString()
         }
     }
 
@@ -169,6 +170,7 @@ class VacancyFragment : Fragment() {
         binding.favoriteButtonOff.setOnClickListener { viewModel?.insertFavoriteVacancy() }
         binding.favoriteButtonOn.setOnClickListener { viewModel?.deleteFavoriteVacancy() }
     }
+
     private fun setJobDescriptionAndSkills(vacancy: DomainVacancy) {
         binding.jobDescription.text = Html.fromHtml(vacancy.description, Html.FROM_HTML_MODE_LEGACY)
         binding.keySkills.text = vacancy.skills.joinToString("\n")
@@ -213,9 +215,5 @@ class VacancyFragment : Fragment() {
             it.isClickable = false
             viewModel.deleteFavoriteVacancy()
         }
-    }
-
-    companion object {
-        private const val VACANCY_KEY = "vacancy_key"
     }
 }
