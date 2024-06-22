@@ -15,7 +15,8 @@ data class VacancyDetails(
     val keySkills: List<KeySkill>?,
     val contacts: Contacts?,
     val experience: Experience?,
-    val employment: Employment
+    val employment: Employment?,
+    val schedule: Schedule?
 )
 
 data class KeySkill(
@@ -33,10 +34,13 @@ data class Phone(
 )
 
 data class Experience(
-    val id: String,
     val name: String
 )
 
 data class Employment(
+    val name: String
+)
+
+data class Schedule(
     val name: String
 )
