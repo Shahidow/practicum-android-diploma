@@ -60,7 +60,7 @@ val dataModule = module {
     factory { Gson() }
 
     single<SearchRepository> {
-        SearchRepositoryImpl(get(), get(), get(), get())
+        SearchRepositoryImpl(get(), get(), get())
     }
 
     single<VacancyRepository> {

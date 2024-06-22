@@ -52,6 +52,7 @@ class VacancyFragment : Fragment() {
                 is VacancyViewState.VacancyDataDetail -> showVacancyDetails(state.domainVacancy)
                 is VacancyViewState.VacancyIsFavorite -> showFavoriteState(true)
                 is VacancyViewState.VacancyIsNotFavorite -> showFavoriteState(false)
+                is VacancyViewState.Error -> setupErrorPlaceholder()
             }
         }
 
@@ -64,6 +65,11 @@ class VacancyFragment : Fragment() {
         setupShareButton()
         setupEmailButton()
         setupPhoneButton()
+    }
+
+    private fun setupErrorPlaceholder() {
+        binding.errorPlaceholder.isVisible = true
+        binding.vacancyProgressBar.isVisible = false
     }
 
     private fun setupShareButton() {
