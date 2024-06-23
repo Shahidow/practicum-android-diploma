@@ -3,7 +3,9 @@ package ru.practicum.android.diploma.domain.filtration.impl
 import ru.practicum.android.diploma.data.filtration.FiltrationParamsSaveRepository
 import ru.practicum.android.diploma.domain.filtration.api.FiltrationParamsSaveInteractor
 
-class FiltrationParamsSaveInteractorImpl(private val filtrationParamsSaveRepository: FiltrationParamsSaveRepository): FiltrationParamsSaveInteractor{
+class FiltrationParamsSaveInteractorImpl(
+    private val filtrationParamsSaveRepository: FiltrationParamsSaveRepository
+) : FiltrationParamsSaveInteractor {
     override fun getFilterParams(): List<String> {
         return filtrationParamsSaveRepository.getFilterParams()
     }

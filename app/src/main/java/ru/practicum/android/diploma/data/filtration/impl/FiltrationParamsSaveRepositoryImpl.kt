@@ -10,7 +10,7 @@ class FiltrationParamsSaveRepositoryImpl(
 ) : FiltrationParamsSaveRepository {
     override fun getFilterParams(): List<String> {
         val json = sharedPreferences.getString(FILTRATION_KEY, null) ?: return emptyList()
-        return (Gson().fromJson(json, Array<String>::class.java)).toList()
+        return Gson().fromJson(json, Array<String>::class.java).toList()
     }
 
     override fun saveFilterParams(listFilterParams: List<String>) {
