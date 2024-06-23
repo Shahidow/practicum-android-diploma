@@ -32,4 +32,11 @@
     <string name="Unavailable">Вакансия не найдена или\nудалена</string>
     <string name="Contacts">Контакты</string>
     <string name="contact_person">Контактное лицо</string>
+    <string name="workplace">Место работы</string>
+    <string name="industry">Отрасль</string>
+    <string name="expected_salary">Ожидаемая зарплата</string>
+    <string name="enter_sum_of_money">Введите сумму</string>
+    <string name="not_show_without_salary">Не показывать без зарплаты</string>
+    <string name="reset">Сбросить</string>
+    <string name="apply">Применить</string>
 </resources>
