@@ -52,4 +52,24 @@
         <item name="android:textSize">@dimen/text_size_16</item>
     </style>
 
+    <style name="search_industry_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/indent_56</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">?attr/colorPrimaryVariant</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:inputType">text</item>
+        <item name="android:imeOptions">actionDone|flagNoExtractUi</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingStart">@dimen/indent_16</item>
+        <item name="android:layout_marginTop">@dimen/indent_8</item>
+        <item name="android:layout_marginBottom">@dimen/indent_8</item>
+        <item name="android:layout_marginStart">@dimen/indent_16</item>
+        <item name="android:layout_marginEnd">@dimen/indent_16</item>
+        <item name="android:background">@drawable/background_search</item>
+        <item name="android:backgroundTint">?attr/colorSecondaryVariant</item>
+    </style>
+
 </resources>

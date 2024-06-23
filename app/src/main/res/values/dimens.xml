@@ -18,4 +18,5 @@
     <dimen name="margin_width_image_view_employer_logo">8dp</dimen>
     <dimen name="corner_radius_employer_logo">12dp</dimen>
     <dimen name="height_60">60dp</dimen>
+    <dimen name="height_64">64dp</dimen>
 </resources>
