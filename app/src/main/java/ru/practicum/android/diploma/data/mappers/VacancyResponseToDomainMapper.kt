@@ -58,8 +58,8 @@ class VacancyResponseToDomainMapper {
         )
     }
 
-    private fun currencyName (currencyName: String?): String? {
-        return when(currencyName) {
+    private fun currencyName(currencyName: String?): String? {
+        return when (currencyName) {
             "AZN" -> "₼"
             "EUR" -> "€"
             "KZT" -> "₸"
@@ -71,7 +71,7 @@ class VacancyResponseToDomainMapper {
         }
     }
 
-    private fun salaryAmount (number: Int?): String? {
+    private fun salaryAmount(number: Int?): String? {
         return if (number != null) {
             val formattedNumber = "%,d".format(number).replace(',', ' ')
             formattedNumber
