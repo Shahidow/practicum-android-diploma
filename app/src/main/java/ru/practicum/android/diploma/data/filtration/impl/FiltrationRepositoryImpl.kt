@@ -26,7 +26,7 @@ class FiltrationRepositoryImpl(
                 val response = networkClient.getIndustries()
                 if (response.isSuccessful) {
                     val industryDomain: List<IndustryDomain> =
-                        response.body()?.industries.let{ filtersMapper.industryMap(it!!) }
+                        response.body()?.industries.let { filtersMapper.industryMap(it!!) }
                     NetworkResponse(industryDomain, SUCCESS_CODE)
                 } else {
                     val errorBody = response.errorBody()?.string() ?: R.string.server_error.toString()
@@ -46,7 +46,7 @@ class FiltrationRepositoryImpl(
                 val response = networkClient.getAreas()
                 if (response.isSuccessful) {
                     val areasDomain: List<AreaDomain> =
-                        response.body()?.areas.let{ filtersMapper.areaMap(it!!) }
+                        response.body()?.areas.let { filtersMapper.areaMap(it!!) }
                     NetworkResponse(areasDomain, SUCCESS_CODE)
                 } else {
                     val errorBody = response.errorBody()?.string() ?: R.string.server_error.toString()

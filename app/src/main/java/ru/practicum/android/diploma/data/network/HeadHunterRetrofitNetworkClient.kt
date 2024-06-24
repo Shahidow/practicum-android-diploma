@@ -1,10 +1,10 @@
 package ru.practicum.android.diploma.data.network
 
 import retrofit2.Response
-import ru.practicum.android.diploma.data.dto.models.VacancyDetails
 import ru.practicum.android.diploma.data.dto.VacancyResponse
 import ru.practicum.android.diploma.data.dto.models.AreasList
 import ru.practicum.android.diploma.data.dto.models.Industry
+import ru.practicum.android.diploma.data.dto.models.VacancyDetails
 
 class HeadHunterRetrofitNetworkClient(private val api: HeadHunterApi) : HeadHunterNetworkClient {
 
@@ -21,6 +21,6 @@ class HeadHunterRetrofitNetworkClient(private val api: HeadHunterApi) : HeadHunt
     }
 
     override suspend fun getAreas(): Response<AreasList> {
-        return  api.getAreas()
+        return api.getAreas()
     }
 }
