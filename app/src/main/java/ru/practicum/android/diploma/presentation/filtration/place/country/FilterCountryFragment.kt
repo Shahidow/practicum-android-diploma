@@ -31,10 +31,10 @@ class FilterCountryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         observeViewState()
-        //filterCountryViewModel.getCountryList()
+        // filterCountryViewModel.getCountryList()
 
         // filterCountryAdapter = FilterCountryAdapter()
-        // filterCountryAdapter?.setInItemVacancyClickListener(this)
+        // filterCountryAdapter?.setInItemCountryClickListener(this)
         // binding.countryRecyclerView.adapter = filterCountryAdapter
     }
 
