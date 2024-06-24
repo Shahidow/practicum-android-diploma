@@ -10,6 +10,7 @@ import ru.practicum.android.diploma.data.dto.VacancyDetails
 import ru.practicum.android.diploma.data.mappers.VacancyResponseToDomainMapper
 import ru.practicum.android.diploma.data.network.HeadHunterNetworkClient
 import ru.practicum.android.diploma.domain.search.models.DomainVacancy
+import ru.practicum.android.diploma.util.INTERNET_ERROR
 import ru.practicum.android.diploma.util.SERVER_ERROR
 import ru.practicum.android.diploma.util.SUCCESS_CODE
 import java.io.IOException
@@ -32,7 +33,7 @@ class VacancyRepository(
                     NetworkResponse(null, SERVER_ERROR, errorBody)
                 }
             } catch (ex: IOException) {
-                NetworkResponse(null, SERVER_ERROR, "Network error: ${ex.message}")
+                NetworkResponse(null, INTERNET_ERROR, "Network error: ${ex.message}")
             } catch (ex: HttpException) {
                 NetworkResponse(null, SERVER_ERROR, "HTTP error: ${ex.message}")
             }

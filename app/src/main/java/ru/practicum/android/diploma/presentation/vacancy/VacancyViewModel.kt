@@ -9,10 +9,12 @@ import ru.practicum.android.diploma.domain.favorites.FavoritesVacancyInteractor
 import ru.practicum.android.diploma.domain.favorites.VacancyViewState
 import ru.practicum.android.diploma.domain.search.models.DomainVacancy
 import ru.practicum.android.diploma.domain.vacancy.GetVacancyDetailsInteractor
+import ru.practicum.android.diploma.util.INTERNET_ERROR
+import ru.practicum.android.diploma.util.SERVER_ERROR
 
 class VacancyViewModel(
     private val getVacancyDetailsInteractor: GetVacancyDetailsInteractor,
-    private val favoritesVacancyInteractor: FavoritesVacancyInteractor
+    private val favoritesVacancyInteractor: FavoritesVacancyInteractor,
 ) : ViewModel() {
 
     private val _vacancyScreenState = MutableLiveData<VacancyViewState>()
@@ -25,15 +27,19 @@ class VacancyViewModel(
         _vacancyScreenState.postValue(VacancyViewState.VacancyLoading)
         viewModelScope.launch {
             val result = getVacancyDetailsInteractor.execute(vacancyId)
-            result.onSuccess {
-                currentDomainVacancy = it
-                _vacancyScreenState.postValue(VacancyViewState.VacancyDataDetail(it))
+            if (result.data != null) {
+                currentDomainVacancy = result.data
+                _vacancyScreenState.postValue(VacancyViewState.VacancyDataDetail(result.data))
                 getFavoriteIds()
-            }.onFailure {
-                _vacancyScreenState.postValue(VacancyViewState.Error)
+            } else {
+                when (result.resultCode) {
+                    INTERNET_ERROR -> getVacancyFromDataBase(vacancyId)
+                    SERVER_ERROR -> _vacancyScreenState.postValue(VacancyViewState.Error)
+                }
             }
         }
     }
+
     fun insertFavoriteVacancy() {
         if (currentDomainVacancy != null) {
             viewModelScope.launch {
@@ -52,7 +58,7 @@ class VacancyViewModel(
         }
     }
 
-    fun getFavoriteIds() {
+    private fun getFavoriteIds() {
         viewModelScope.launch {
             val favoriteIdList = favoritesVacancyInteractor.getFavoriteIds()
             if (favoriteIdList.contains(currentDomainVacancy?.vacancyId)) {
@@ -60,6 +66,15 @@ class VacancyViewModel(
             } else {
                 _vacancyScreenState.postValue(VacancyViewState.VacancyIsNotFavorite)
             }
+        }
+    }
+
+    private fun getVacancyFromDataBase(vacancyId: String) {
+        viewModelScope.launch {
+            val vacancy = favoritesVacancyInteractor.getOneFavoriteVacancy(vacancyId)
+            currentDomainVacancy = vacancy
+            _vacancyScreenState.postValue(VacancyViewState.VacancyDataDetail(vacancy))
+            getFavoriteIds()
         }
     }
 }

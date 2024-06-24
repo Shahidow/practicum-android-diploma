@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -145,7 +146,7 @@ class VacancyFragment : Fragment() {
 
             vacancy.salaryFrom != null -> "от ${vacancy.salaryFrom} ${vacancy.salaryCurrency}"
             vacancy.salaryTo != null -> "до ${vacancy.salaryTo} ${vacancy.salaryCurrency}"
-            else -> R.string.salary_is_not_specified.toString()
+            else -> requireContext().getString(R.string.salary_is_not_specified)
         }
     }
 
