@@ -14,7 +14,6 @@
         android:layout_height="50dp"
         android:layout_marginEnd="8dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:scaleType="centerCrop"
         android:src="@drawable/placeholder_android_xml_24" />
 
     <LinearLayout
