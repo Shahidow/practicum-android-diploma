@@ -21,6 +21,12 @@ class FiltrationParamsSaveRepositoryImpl(
             .apply()
     }
 
+    override fun insertFilterParam(filterParam: String) {
+        val listOfParams = getFilterParams().toMutableList()
+        listOfParams.add(filterParam)
+        saveFilterParams(listOfParams)
+    }
+
     private fun removeFilterParamsInSharedPreferences() {
         sharedPreferences.edit()
             .remove(FILTRATION_KEY)
