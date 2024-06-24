@@ -13,7 +13,7 @@ import ru.practicum.android.diploma.domain.search.models.DomainVacancy
 
 class VacancyViewHolder(
     binding: ItemVacancyViewBinding,
-    private val itemVacancyClickListener: VacancyAdapter.ItemVacancyClickInterface?
+    private val itemVacancyClickListener: VacancyAdapter.ItemVacancyClickInterface?,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val vacancyNameAndCity: TextView = binding.textViewVacancyNameAndCity

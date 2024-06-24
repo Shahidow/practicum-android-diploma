@@ -161,14 +161,9 @@ class VacancyFragment : Fragment() {
 
         Glide.with(requireContext())
             .load(vacancy.employerLogoUrl)
-            .centerCrop()
+            .fitCenter()
             .placeholder(R.drawable.placeholder_logo)
             .into(binding.includeCompany.companyLogo)
-    }
-
-    private fun setFavoriteButton() {
-        binding.favoriteButtonOff.setOnClickListener { viewModel?.insertFavoriteVacancy() }
-        binding.favoriteButtonOn.setOnClickListener { viewModel?.deleteFavoriteVacancy() }
     }
 
     private fun setJobDescriptionAndSkills(vacancy: DomainVacancy) {

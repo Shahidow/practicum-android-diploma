@@ -38,8 +38,8 @@ class VacancyViewModel(
         if (currentDomainVacancy != null) {
             viewModelScope.launch {
                 favoritesVacancyInteractor.insertFavoriteVacancy(currentDomainVacancy!!)
+                getFavoriteIds()
             }
-            getFavoriteIds()
         }
     }
 
@@ -47,8 +47,8 @@ class VacancyViewModel(
         if (currentDomainVacancy != null) {
             viewModelScope.launch {
                 favoritesVacancyInteractor.deleteFavoriteVacancy(currentDomainVacancy!!)
+                getFavoriteIds()
             }
-            getFavoriteIds()
         }
     }
 
