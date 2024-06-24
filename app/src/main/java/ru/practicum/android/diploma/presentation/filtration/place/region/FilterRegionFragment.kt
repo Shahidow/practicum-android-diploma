@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.presentation.filtration.place
+package ru.practicum.android.diploma.presentation.filtration.place.region
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,7 +16,7 @@ class FilterRegionFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentFilterRegionBinding.inflate(inflater, container, false)
         return binding.root
     }
