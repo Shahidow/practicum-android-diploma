@@ -13,9 +13,9 @@ class VacancyResponseToDomainMapper {
                 name = it.name,
                 city = it.area.name,
                 area = it.area.name,
-                salaryFrom = it.salary?.from,
-                salaryTo = it.salary?.to,
-                salaryCurrency = it.salary?.currency,
+                salaryFrom = salaryAmount(it.salary?.from),
+                salaryTo = salaryAmount(it.salary?.to),
+                salaryCurrency = currencyName(it.salary?.currency),
                 employerName = it.employer.name,
                 employerLogoUrl = it.employer.logoUrls?.logo,
                 experience = null,
@@ -39,9 +39,9 @@ class VacancyResponseToDomainMapper {
             name = vacancyDetails.name,
             city = vacancyDetails.area.name,
             area = vacancyDetails.area.name,
-            salaryFrom = vacancyDetails.salary?.from,
-            salaryTo = vacancyDetails.salary?.to,
-            salaryCurrency = vacancyDetails.salary?.currency,
+            salaryFrom = salaryAmount(vacancyDetails.salary?.from),
+            salaryTo = salaryAmount(vacancyDetails.salary?.to),
+            salaryCurrency = currencyName(vacancyDetails.salary?.currency),
             employerName = vacancyDetails.employer.name,
             employerLogoUrl = vacancyDetails.employer.logoUrls?.logo,
             experience = vacancyDetails.experience?.name,
@@ -58,4 +58,25 @@ class VacancyResponseToDomainMapper {
         )
     }
 
+    private fun currencyName(currencyName: String?): String? {
+        return when (currencyName) {
+            "AZN" -> "₼"
+            "EUR" -> "€"
+            "KZT" -> "₸"
+            "RUR" -> "₽"
+            "UAH" -> "₴"
+            "USD" -> "$"
+            "UZS" -> "m"
+            else -> currencyName
+        }
+    }
+
+    private fun salaryAmount(number: Int?): String? {
+        return if (number != null) {
+            val formattedNumber = "%,d".format(number).replace(',', ' ')
+            formattedNumber
+        } else {
+            null
+        }
+    }
 }
