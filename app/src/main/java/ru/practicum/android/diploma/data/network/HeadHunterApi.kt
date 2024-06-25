@@ -4,8 +4,10 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
+import retrofit2.http.Query
 import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.BuildConfig
+import ru.practicum.android.diploma.data.dto.IndustryResponse
 import ru.practicum.android.diploma.data.dto.VacancyDetails
 import ru.practicum.android.diploma.data.dto.VacancyResponse
 
@@ -21,4 +23,11 @@ interface HeadHunterApi {
     suspend fun getVacancyDetails(
         @Path("id") id: String
     ): Response<VacancyDetails>
+
+    @Headers("Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}", "User-Agent: DreamJob (shahidow@mail.com)")
+    @GET("industries")
+    suspend fun getIndustries(
+        @Query("locale") locale: String = "RU",
+        @Query("host") host: String = "hh.ru"
+    ): Response<List<IndustryResponse>>
 }
