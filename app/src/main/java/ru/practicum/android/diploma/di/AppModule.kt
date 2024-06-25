@@ -20,7 +20,7 @@ val appModule = module {
         VacancyViewModel(get(), get())
     }
 
-    viewModel<FilterRegionViewModel>{
+    viewModel<FilterRegionViewModel> {
         FilterRegionViewModel()
     }
 }

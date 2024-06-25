@@ -38,7 +38,6 @@ class FilterRegionViewModel : ViewModel() {
        */
     }
 
-
     fun insertFilterRegion(area: FilterRegionArea) {
         // filtrationParamsSaveInteractor.saveFilterParams()
     }
