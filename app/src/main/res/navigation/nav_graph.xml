@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/filterCountryFragment"
-        android:name="ru.practicum.android.diploma.presentation.filtration.place.FilterCountryFragment"
+        android:name="ru.practicum.android.diploma.presentation.filtration.place.country.FilterCountryFragment"
         android:label="fragment_filter_country"
         tools:layout="@layout/fragment_filter_country" />
     <fragment
