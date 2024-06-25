@@ -11,11 +11,12 @@ class IndustryViewHolder(
     private var itemIndustry: IndustryGroup? = null
 
     init {
-        itemView.setOnClickListener {
+        binding.radioButtonIndustry.setOnClickListener {
             itemIndustry?.let { industry ->
                 itemIndustryClickListener?.onItemIndustryClick(industry)
             }
         }
+        itemView.setOnClickListener(null)
     }
 
     fun bind(industry: IndustryGroup, isSelected: Boolean) {
