@@ -3,12 +3,12 @@ package ru.practicum.android.diploma.presentation.filtration
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.practicum.android.diploma.domain.search.models.IndustryGroup
+import ru.practicum.android.diploma.domain.filtration.models.IndustryDomain
 
 
 class FiltrationViewModel : ViewModel() {
-    private val _industry = MutableLiveData<IndustryGroup?>()
-    val industry: LiveData<IndustryGroup?> get() = _industry
+    private val _industry = MutableLiveData<IndustryDomain?>()
+    val industry: LiveData<IndustryDomain?> get() = _industry
 
     private val _workplace = MutableLiveData<String?>()
     val workplace: LiveData<String?> get() = _workplace

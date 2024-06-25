@@ -5,20 +5,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.domain.search.models.IndustryGroup
-import ru.practicum.android.diploma.domain.vacancy.GetIndustriesInteractor
+import ru.practicum.android.diploma.domain.filtration.FiltrationInteractor
+import ru.practicum.android.diploma.domain.filtration.models.IndustryDomain
 
 class IndustryViewModel(
-    private val industryInteractor: GetIndustriesInteractor
+    private val industryInteractor: FiltrationInteractor
 ) : ViewModel() {
 
     // Переменная для хранения списка отраслей
-    private val _industries = MutableLiveData<List<IndustryGroup>>()
-    val industries: LiveData<List<IndustryGroup>> get() = _industries
+    private val _industries = MutableLiveData<List<IndustryDomain>>()
+    val industries: LiveData<List<IndustryDomain>> get() = _industries
 
     // Переменная для хранения выбранной отрасли
-    private val _selectedIndustry = MutableLiveData<IndustryGroup?>()
-    val selectedIndustry: LiveData<IndustryGroup?> get() = _selectedIndustry
+    private val _selectedIndustry = MutableLiveData<IndustryDomain?>()
+    val selectedIndustry: LiveData<IndustryDomain?> get() = _selectedIndustry
 
     init {
         loadIndustries()
@@ -28,12 +28,15 @@ class IndustryViewModel(
     private fun loadIndustries() {
         viewModelScope.launch {
             val industries = industryInteractor.getIndustries()
-            _industries.value = industries
+            if(industries.data != null) {
+                _industries.value = industries.data!!
+            }
+
         }
     }
 
     // Метод для установки выбранной отрасли
-    fun setSelectedIndustry(industry: IndustryGroup?) {
+    fun setSelectedIndustry(industry: IndustryDomain?) {
         _selectedIndustry.value = industry
     }
 

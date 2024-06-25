@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.presentation.filtration
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +43,7 @@ class FiltrationFragment : Fragment() {
         }
 
         binding.industryContainer.setOnClickListener {
+            Log.i("123", "!!!!!!")
             findNavController().navigate(R.id.action_filtrationFragment_to_industryFragment)
         }
 

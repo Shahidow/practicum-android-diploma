@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentIndustryBinding
-import ru.practicum.android.diploma.domain.search.models.IndustryGroup
+import ru.practicum.android.diploma.domain.filtration.models.IndustryDomain
 import ru.practicum.android.diploma.presentation.filtration.industry.recyclerview.IndustryAdapter
 
 class IndustryFragment : Fragment(), IndustryAdapter.ItemIndustryClickInterface {
@@ -70,7 +70,7 @@ class IndustryFragment : Fragment(), IndustryAdapter.ItemIndustryClickInterface 
         }
     }
 
-    override fun onItemIndustryClick(industry: IndustryGroup) {
+    override fun onItemIndustryClick(industry: IndustryDomain) {
         val selectedIndustry = viewModel.selectedIndustry.value
         if (selectedIndustry?.name == industry.name) {
             // Если та же самая отрасль нажата снова, убираем выбор

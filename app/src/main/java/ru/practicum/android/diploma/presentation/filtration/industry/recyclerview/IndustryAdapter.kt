@@ -5,12 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.ItemIndustryViewBinding
-import ru.practicum.android.diploma.domain.search.models.IndustryGroup
+import ru.practicum.android.diploma.domain.filtration.models.IndustryDomain
 
 class IndustryAdapter(private val itemIndustryClickListener: ItemIndustryClickInterface) :
     RecyclerView.Adapter<IndustryViewHolder>() {
-    private var industryList = arrayListOf<IndustryGroup>()
-    private var selectedIndustry: IndustryGroup? = null
+    private var industryList = arrayListOf<IndustryDomain>()
+    private var selectedIndustry: IndustryDomain? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndustryViewHolder {
         return IndustryViewHolder(
@@ -32,17 +32,17 @@ class IndustryAdapter(private val itemIndustryClickListener: ItemIndustryClickIn
         }
     }
 
-    fun setIndustryList(industryList: List<IndustryGroup>) {
+    fun setIndustryList(industryList: List<IndustryDomain>) {
         this.industryList = ArrayList(industryList)
         notifyDataSetChanged()
     }
 
-    fun setSelectedIndustry(selectedIndustry: IndustryGroup?) {
+    fun setSelectedIndustry(selectedIndustry: IndustryDomain?) {
         this.selectedIndustry = selectedIndustry
         notifyDataSetChanged()
     }
 
     interface ItemIndustryClickInterface {
-        fun onItemIndustryClick(industry: IndustryGroup)
+        fun onItemIndustryClick(industry: IndustryDomain)
     }
 }
