@@ -6,18 +6,19 @@ import ru.practicum.android.diploma.domain.filtration.models.IndustryDomain
 
 class IndustryViewHolder(
     private val binding: ItemIndustryViewBinding,
-    private val itemIndustryClickListener: IndustryAdapter.ItemIndustryClickInterface?
+    private val itemIndustryClickListener: IndustryAdapter.ItemIndustryClickInterface?,
 ) : RecyclerView.ViewHolder(binding.root) {
     private var itemIndustry: IndustryDomain? = null
 
     init {
         itemView.setOnClickListener {
-        binding.radioButtonIndustry.setOnClickListener {
-            itemIndustry?.let { industry ->
-                itemIndustryClickListener?.onItemIndustryClick(industry)
+            binding.radioButtonIndustry.setOnClickListener {
+                itemIndustry?.let { industry ->
+                    itemIndustryClickListener?.onItemIndustryClick(industry)
+                }
             }
+            itemView.setOnClickListener(null)
         }
-        itemView.setOnClickListener(null)
     }
 
     fun bind(industry: IndustryDomain, isSelected: Boolean) {
