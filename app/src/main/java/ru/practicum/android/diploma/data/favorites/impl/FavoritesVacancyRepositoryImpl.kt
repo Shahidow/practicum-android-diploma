@@ -14,14 +14,16 @@ class FavoritesVacancyRepositoryImpl(
     private val appDatabase: AppDatabase,
     private val vacancyConverter: VacancyConverter
 ) : FavoritesVacancyRepository {
+    companion object {
+        const val FAVORITES_TAG = "favorites"
+    }
 
-    private val teg = "favorites"
     override suspend fun getAllFavoritesVacancy() = flow {
         emit(withContext(Dispatchers.IO) {
             try {
                 appDatabase.favoriteVacancyDao().getFavorites().map { vacancy -> vacancyConverter.map(vacancy) }
             } catch (e: IOException) {
-                Log.e(teg, "Caught exception:  ${e.message}")
+                Log.e(FAVORITES_TAG, "Caught exception:  ${e.message}")
                 null
             }
         })

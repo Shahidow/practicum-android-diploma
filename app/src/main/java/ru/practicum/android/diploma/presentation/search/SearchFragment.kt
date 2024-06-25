@@ -54,7 +54,9 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
                 is SearchState.Loading -> setStateIsLoading()
                 is SearchState.NoResults -> setStateEmptyResult()
                 is SearchState.Success -> setSateIsData(it.vacancies, it.totalVacancies)
-                is SearchState.Continuation -> setContinuationData()
+                is SearchState.Continuation -> {
+                    // Загрузка данных
+                }
             }
         }
 
@@ -81,7 +83,6 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
 
         vacancyAdapter = VacancyAdapter()
         vacancyAdapter?.setInItemVacancyClickListener(this)
-        // binding.searchRecyclerView = LinearLayoutManager(context)
         binding.searchRecyclerView.adapter = vacancyAdapter
         binding.filterButton.setOnClickListener {
             findNavController().navigate(R.id.action_searchFragment_to_filtrationFragment)
@@ -103,6 +104,11 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        searchViewModel.onResume()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -116,7 +122,6 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
 
     private fun setStateNetworkError() {
         binding.apply {
-            continuationProgressBar.isVisible = false
             foundResultsMessage.isVisible = false
             searchRecyclerView.isVisible = false
             searchProgressBar.isVisible = false
@@ -131,7 +136,6 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
 
     private fun setStateServerError() {
         binding.apply {
-            continuationProgressBar.isVisible = false
             foundResultsMessage.isVisible = false
             searchRecyclerView.isVisible = false
             searchProgressBar.isVisible = false
@@ -146,7 +150,6 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
 
     private fun setStateDefault() {
         binding.apply {
-            continuationProgressBar.isVisible = false
             foundResultsMessage.isVisible = false
             searchRecyclerView.isVisible = false
             searchProgressBar.isVisible = false
@@ -161,7 +164,6 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
 
     private fun setStateIsLoading() {
         binding.apply {
-            continuationProgressBar.isVisible = false
             foundResultsMessage.isVisible = false
             searchRecyclerView.isVisible = false
             searchPlaceholderLayout.isVisible = false
@@ -171,7 +173,6 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
 
     private fun setStateEmptyResult() {
         binding.apply {
-            continuationProgressBar.isVisible = false
             searchRecyclerView.isVisible = false
             searchProgressBar.isVisible = false
             foundResultsMessage.isVisible = true
@@ -187,19 +188,18 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
 
     private fun setSateIsData(domainVacancyList: List<DomainVacancy>, totalVacancies: Int) {
         binding.apply {
-            continuationProgressBar.isVisible = false
             foundResultsMessage.isVisible = true
             searchRecyclerView.isVisible = true
             searchProgressBar.isVisible = false
             searchPlaceholderLayout.isVisible = false
             searchPlaceholderMessage.text = this@SearchFragment.getString(R.string.count_get_list_of_vacancies)
-            foundResultsMessage.text = java.lang.String(
-                this@SearchFragment.getString(R.string.found)
-                    + whitespace
-                    + totalVacancies.toString()
-                    + whitespace
-                    + this@SearchFragment.getString(R.string.vacancy)
-            )
+            foundResultsMessage.text = buildString {
+                append(this@SearchFragment.getString(R.string.found))
+                append(WHITESPACE)
+                append(totalVacancies.toString())
+                append(WHITESPACE)
+                append(this@SearchFragment.getString(R.string.vacancy))
+            }
             Glide.with(this@SearchFragment)
                 .load(R.drawable.placeholder_cat)
                 .centerCrop()
@@ -208,12 +208,8 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
         vacancyAdapter?.setVacancyList(ArrayList(domainVacancyList))
     }
 
-    private fun setContinuationData() {
-        binding.continuationProgressBar.isVisible = true
-    }
-
     companion object {
-        const val whitespace = " "
+        const val WHITESPACE = " "
     }
 
 }
