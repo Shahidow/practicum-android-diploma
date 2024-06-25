@@ -22,7 +22,9 @@ import ru.practicum.android.diploma.data.network.HeadHunterNetworkClient
 import ru.practicum.android.diploma.data.network.HeadHunterRetrofitNetworkClient
 import ru.practicum.android.diploma.data.search.SearchRepository
 import ru.practicum.android.diploma.data.search.impl.SearchRepositoryImpl
+import ru.practicum.android.diploma.data.repository.IndustryRepository
 import ru.practicum.android.diploma.data.vacancy.VacancyRepository
+import ru.practicum.android.diploma.domain.vacancy.GetIndustriesInteractor
 import ru.practicum.android.diploma.util.BASE_URL
 import ru.practicum.android.diploma.util.Debounce
 import ru.practicum.android.diploma.util.SHARED_PREFERENCES
@@ -71,6 +73,10 @@ val dataModule = module {
         VacancyRepository(get(), get())
     }
 
+    single<IndustryRepository> {
+        IndustryRepository(get())
+    }
+
     single<FavoritesVacancyRepository> {
         FavoritesVacancyRepositoryImpl(get(), get())
     }
@@ -81,6 +87,9 @@ val dataModule = module {
         FiltrationParamsSaveRepositoryImpl(get())
     }
 
+    single<GetIndustriesInteractor> {
+        GetIndustriesInteractor(get())
+    }
     single<FiltrationRepository> {
         FiltrationRepositoryImpl(get(), get())
     }
