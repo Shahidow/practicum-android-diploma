@@ -84,5 +84,4 @@ val dataModule = module {
     single<FiltrationRepository> {
         FiltrationRepositoryImpl(get(), get())
     }
-
 }

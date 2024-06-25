@@ -24,6 +24,13 @@ val appModule = module {
         VacancyViewModel(get(), get())
     }
 
+    viewModel<FiltrationViewModel> {
+        FiltrationViewModel()
+    }
+    viewModel<IndustryViewModel> {
+        IndustryViewModel(get())
+    }
+
     viewModel<FilterRegionViewModel> {
         FilterRegionViewModel()
     }
@@ -33,7 +40,7 @@ val appModule = module {
     }
 
     viewModel<IndustryViewModel> {
-        IndustryViewModel()
+        IndustryViewModel(get())
     }
 
     viewModel<FilterPlaceViewModel> {

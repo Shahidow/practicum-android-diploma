@@ -14,5 +14,10 @@
         <!-- Customize your light theme here. -->
         <item name="android:windowBackground">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="radioButtonStyle">@style/Widget.App.RadioButton</item>
+    </style>
+
+    <style name="Widget.App.RadioButton" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/blue</item>
     </style>
 </resources>
