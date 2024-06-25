@@ -25,6 +25,7 @@ val appModule = module {
     viewModel<FiltrationViewModel> {
         FiltrationViewModel()
     }
+
     viewModel<IndustryViewModel> {
         IndustryViewModel(get())
     }
