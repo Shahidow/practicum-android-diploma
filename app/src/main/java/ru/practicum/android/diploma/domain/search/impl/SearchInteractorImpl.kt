@@ -20,7 +20,6 @@ class SearchInteractorImpl(private val repository: SearchRepository) : SearchInt
                     pages = repository.pages
                     Pair(result.data, null)
                 }
-
                 is Resource.Error -> {
                     Pair(null, result.resultCode)
                 }

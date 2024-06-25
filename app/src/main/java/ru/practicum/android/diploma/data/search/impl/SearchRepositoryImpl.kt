@@ -17,7 +17,7 @@ import ru.practicum.android.diploma.util.SERVER_ERROR
 class SearchRepositoryImpl(
     private val networkClient: HeadHunterNetworkClient,
     private val context: Context,
-    private val converter: VacancyResponseToDomainMapper,
+    private val converter: VacancyResponseToDomainMapper
 ) : SearchRepository {
     override var currentPage: Int? = null
     override var foundItems: Int? = null
