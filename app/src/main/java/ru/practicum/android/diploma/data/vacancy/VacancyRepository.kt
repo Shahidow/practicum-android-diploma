@@ -6,7 +6,7 @@ import retrofit2.HttpException
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.data.dto.NetworkResponse
 import ru.practicum.android.diploma.data.dto.NotFoundException
-import ru.practicum.android.diploma.data.dto.VacancyDetails
+import ru.practicum.android.diploma.data.dto.models.VacancyDetails
 import ru.practicum.android.diploma.data.mappers.VacancyResponseToDomainMapper
 import ru.practicum.android.diploma.data.network.HeadHunterNetworkClient
 import ru.practicum.android.diploma.domain.search.models.DomainVacancy
