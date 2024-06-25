@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentFiltrationBinding
 
 class FiltrationFragment : Fragment() {
 
     private var _binding: FragmentFiltrationBinding? = null
     private val binding get() = _binding!!
+    private val filtrationViewModel by viewModel<FiltrationViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
