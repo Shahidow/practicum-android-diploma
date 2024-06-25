@@ -28,7 +28,7 @@ class FiltersMapper {
         }
     }
 
-    fun industryItemMap(industries: List<IndustryItem>): List<IndustryDomain> {
+    private fun industryItemMap(industries: List<IndustryItem>): List<IndustryDomain> {
         return industries.map {
             IndustryDomain(
                 id = it.id,

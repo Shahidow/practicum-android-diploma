@@ -18,10 +18,11 @@ class IndustryFragment : Fragment(), IndustryAdapter.ItemIndustryClickInterface 
     private var _binding: FragmentIndustryBinding? = null
     private val binding get() = _binding!!
     private val viewModel: IndustryViewModel by viewModel<IndustryViewModel>()
-    private lateinit var adapter: IndustryAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentIndustryBinding.inflate(inflater, container, false)
         return binding.root
@@ -35,7 +36,7 @@ class IndustryFragment : Fragment(), IndustryAdapter.ItemIndustryClickInterface 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = IndustryAdapter(this)
+        val adapter = IndustryAdapter(this)
         binding.industryRecyclerView.adapter = adapter
 
         viewModel.industries.observe(viewLifecycleOwner) { industries ->
@@ -55,14 +56,17 @@ class IndustryFragment : Fragment(), IndustryAdapter.ItemIndustryClickInterface 
         }
 
         binding.industryInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val query = s.toString()
-                viewModel.filterIndustries(query)
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Эта функция пуста
             }
 
-            override fun afterTextChanged(s: Editable?) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.filterIndustries(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Эта функция пуста
+            }
         })
 
         binding.industrySelectionBackImageView.setOnClickListener {

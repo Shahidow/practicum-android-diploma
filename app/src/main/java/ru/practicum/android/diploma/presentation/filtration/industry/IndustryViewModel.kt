@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.domain.filtration.FiltrationInteractor
 import ru.practicum.android.diploma.domain.filtration.models.IndustryDomain
 
 class IndustryViewModel(
-    private val industryInteractor: FiltrationInteractor
+    private val industryInteractor: FiltrationInteractor,
 ) : ViewModel() {
 
     // Переменная для хранения списка отраслей
@@ -28,7 +28,7 @@ class IndustryViewModel(
     private fun loadIndustries() {
         viewModelScope.launch {
             val industries = industryInteractor.getIndustries()
-            if(industries.data != null) {
+            if (industries.data != null) {
                 _industries.value = industries.data!!
             }
 
