@@ -11,6 +11,7 @@
     <dimen name="indent_20">20dp</dimen>
     <dimen name="indent_24">24dp</dimen>
     <dimen name="indent_32">32dp</dimen>
+    <dimen name="indent_36">36dp</dimen>
     <dimen name="indent_48">48dp</dimen>
     <dimen name="indent_56">56dp</dimen>
     <dimen name="border_width_employer_logo">1dp</dimen>
