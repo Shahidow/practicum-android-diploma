@@ -26,9 +26,9 @@ class FiltrationParamsSaveRepositoryImpl(
             .apply()
     }
     override fun insertFilterParam(filterParam: String) {
-        val listOfParams = getFilterParams().toMutableList()
-        listOfParams.add(filterParam)
-        saveFilterParams(listOfParams)
+//        val listOfParams = getFilterParams().toMutableList()
+//        listOfParams.add(filterParam)
+//        saveFilterParams(listOfParams)
     }
     override fun getRegionFilterParams(): FilterRegionArea? {
         val json = sharedPreferences.getString(FILTRATION_REGION_KEY, null) ?: return null
@@ -56,7 +56,7 @@ class FiltrationParamsSaveRepositoryImpl(
             .apply()
     }
 
-    private fun removeFilterParamsInSharedPreferences(key: String)
+    private fun removeFilterParamsInSharedPreferences(key: String) {
         sharedPreferences.edit()
             .remove(key)
             .apply()
