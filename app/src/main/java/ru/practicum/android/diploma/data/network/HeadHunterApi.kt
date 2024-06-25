@@ -15,13 +15,13 @@ interface HeadHunterApi {
     @Headers("Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}", "User-Agent: DreamJob (shahidow@mail.com)")
     @GET("vacancies")
     suspend fun getVacancies(
-        @QueryMap filters: Map<String, String>
+        @QueryMap filters: Map<String, String>,
     ): Response<VacancyResponse>
 
     @Headers("Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}", "User-Agent: DreamJob (shahidow@mail.com)")
     @GET("vacancies/{id}")
     suspend fun getVacancyDetails(
-        @Path("id") id: String
+        @Path("id") id: String,
     ): Response<VacancyDetails>
 
     @Headers("Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}", "User-Agent: DreamJob (shahidow@mail.com)")

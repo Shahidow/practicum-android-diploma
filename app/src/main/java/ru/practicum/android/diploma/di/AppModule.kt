@@ -51,3 +51,4 @@ val appModule = module {
         FiltrationViewModel()
     }
 }
+

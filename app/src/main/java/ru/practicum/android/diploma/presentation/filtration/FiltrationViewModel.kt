@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.practicum.android.diploma.domain.filtration.models.IndustryDomain
 
-
 class FiltrationViewModel : ViewModel() {
     private val _industry = MutableLiveData<IndustryDomain?>()
     val industry: LiveData<IndustryDomain?> get() = _industry
