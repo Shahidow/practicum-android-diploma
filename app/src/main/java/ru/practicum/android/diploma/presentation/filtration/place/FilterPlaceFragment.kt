@@ -2,7 +2,6 @@ package ru.practicum.android.diploma.presentation.filtration.place
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,34 +35,22 @@ class FilterPlaceFragment : Fragment() {
         _binding = null
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         activityViewModel.country.observe(viewLifecycleOwner) { country ->
             if (country != null) {
-                binding.countrySelectionEditText.setText(country.name)
-                binding.workplaceApplyButton.isVisible = true
-                binding.countryClearImageView.isVisible = true
-                binding.countrySelectionArrowForward.isVisible = false
+                onCountrySelected(country.name)
             } else {
-                binding.countrySelectionEditText.setText("")
-                binding.workplaceApplyButton.isVisible = false
-                binding.countryClearImageView.isVisible = false
-                binding.countrySelectionArrowForward.isVisible = true
+                onCountryCleared()
             }
         }
 
         activityViewModel.region.observe(viewLifecycleOwner) { area ->
             if (area != null) {
-                binding.regionEditText.setText(area.name)
-                binding.workplaceApplyButton.isVisible = true
-                binding.regionArrowForward.isVisible = false
-                binding.regionClearImageView.isVisible = true
+                onRegionSelected(area.name)
             } else {
-                binding.regionEditText.setText("")
-                binding.regionArrowForward.isVisible = true
-                binding.regionClearImageView.isVisible = false
+                onRegionCleared()
             }
         }
 
@@ -71,12 +58,12 @@ class FilterPlaceFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        binding.countryClearImageView.setOnClickListener{
+        binding.countryClearImageView.setOnClickListener {
             activityViewModel.country.value = null
             activityViewModel.region.value = null
         }
 
-        binding.regionClearImageView.setOnClickListener{
+        binding.regionClearImageView.setOnClickListener {
             activityViewModel.region.value = null
         }
 
@@ -93,5 +80,34 @@ class FilterPlaceFragment : Fragment() {
             activityViewModel.regionFilter.value = activityViewModel.region.value
             findNavController().navigateUp()
         }
+    }
+
+    private fun onCountrySelected(countryName: String) {
+        binding.countrySelectionEditText.setText(countryName)
+        binding.workplaceApplyButton.isVisible = true
+        binding.countryClearImageView.isVisible = true
+        binding.countrySelectionArrowForward.isVisible = false
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun onCountryCleared() {
+        binding.countrySelectionEditText.setText("")
+        binding.workplaceApplyButton.isVisible = false
+        binding.countryClearImageView.isVisible = false
+        binding.countrySelectionArrowForward.isVisible = true
+    }
+
+    private fun onRegionSelected(regionName: String) {
+        binding.regionEditText.setText(regionName)
+        binding.workplaceApplyButton.isVisible = true
+        binding.regionArrowForward.isVisible = false
+        binding.regionClearImageView.isVisible = true
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun onRegionCleared() {
+        binding.regionEditText.setText("")
+        binding.regionArrowForward.isVisible = true
+        binding.regionClearImageView.isVisible = false
     }
 }
