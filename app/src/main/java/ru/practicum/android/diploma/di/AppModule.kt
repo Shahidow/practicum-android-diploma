@@ -10,8 +10,10 @@ import ru.practicum.android.diploma.presentation.filtration.place.country.Filter
 import ru.practicum.android.diploma.presentation.filtration.place.region.FilterRegionViewModel
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.presentation.vacancy.VacancyViewModel
+import ru.practicum.android.diploma.ui.root.ActivityViewModel
 
 val appModule = module {
+
     viewModel<SearchViewModel> {
         SearchViewModel(get(), get())
     }
@@ -32,11 +34,11 @@ val appModule = module {
     }
 
     viewModel<FilterRegionViewModel> {
-        FilterRegionViewModel()
+        FilterRegionViewModel(get())
     }
 
     viewModel<FilterCountryViewModel> {
-        FilterCountryViewModel()
+        FilterCountryViewModel(get())
     }
 
     viewModel<IndustryViewModel> {

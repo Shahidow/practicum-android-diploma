@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import ru.practicum.android.diploma.data.filtration.FiltrationParamsSaveRepository
 import ru.practicum.android.diploma.domain.filtration.models.AreaDomain
-import ru.practicum.android.diploma.domain.filtration.models.FilterRegionArea
 import ru.practicum.android.diploma.domain.filtration.models.IndustryDomain
 import ru.practicum.android.diploma.util.FILTRATION_AREA_KEY
 import ru.practicum.android.diploma.util.FILTRATION_INDUSTRY_KEY
@@ -26,12 +25,12 @@ class FiltrationParamsSaveRepositoryImpl(
             .apply()
     }
 
-    override fun getRegionFilterParams(): FilterRegionArea? {
+    override fun getRegionFilterParams(): AreaDomain? {
         val json = sharedPreferences.getString(FILTRATION_REGION_KEY, null) ?: return null
-        return Gson().fromJson(json, FilterRegionArea::class.java)
+        return Gson().fromJson(json, AreaDomain::class.java)
     }
 
-    override fun saveRegionFilterParams(filterRegionArea: FilterRegionArea) {
+    override fun saveRegionFilterParams(filterRegionArea: AreaDomain) {
         removeFilterParamsInSharedPreferences(FILTRATION_REGION_KEY)
         val json = Gson().toJson(filterRegionArea)
         sharedPreferences.edit()

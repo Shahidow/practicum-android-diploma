@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.presentation.filtration
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,11 +38,10 @@ class FiltrationFragment : Fragment() {
         }
 
         binding.workplaceContainer.setOnClickListener {
-            // переход к экрану выбора места работы
+            findNavController().navigate(R.id.action_filtrationFragment_to_filterPlaceFragment)
         }
 
         binding.industryContainer.setOnClickListener {
-            Log.i("123", "!!!!!!")
             findNavController().navigate(R.id.action_filtrationFragment_to_industryFragment)
         }
 
@@ -52,7 +50,7 @@ class FiltrationFragment : Fragment() {
         }
 
         viewModel.workplace.observe(viewLifecycleOwner) { workplace ->
-            binding.filtrationWorkplaceEditText.setText(workplace ?: "")
+            binding.filtrationWorkplaceInputLayout.text = workplace ?: ""
         }
 
         binding.resetButton.setOnClickListener {

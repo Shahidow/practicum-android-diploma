@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.domain.filtration.impl
 import ru.practicum.android.diploma.data.filtration.FiltrationParamsSaveRepository
 import ru.practicum.android.diploma.domain.filtration.FiltrationParamsSaveInteractor
 import ru.practicum.android.diploma.domain.filtration.models.AreaDomain
-import ru.practicum.android.diploma.domain.filtration.models.FilterRegionArea
 import ru.practicum.android.diploma.domain.filtration.models.IndustryDomain
 
 class FiltrationParamsSaveInteractorImpl(
@@ -17,11 +16,11 @@ class FiltrationParamsSaveInteractorImpl(
         filtrationParamsSaveRepository.saveAreaFilterParams(areaDomain)
     }
 
-    override fun getRegionFilterParams(): FilterRegionArea? {
+    override fun getRegionFilterParams(): AreaDomain? {
         return filtrationParamsSaveRepository.getRegionFilterParams()
     }
 
-    override fun saveRegionFilterParams(filterRegionArea: FilterRegionArea) {
+    override fun saveRegionFilterParams(filterRegionArea: AreaDomain) {
         filtrationParamsSaveRepository.saveRegionFilterParams(filterRegionArea)
     }
 
