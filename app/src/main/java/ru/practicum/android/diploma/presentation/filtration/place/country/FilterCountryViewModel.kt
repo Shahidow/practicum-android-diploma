@@ -16,21 +16,22 @@ class FilterCountryViewModel(private val interactor: FiltrationInteractor) : Vie
     val filtrationParams: LiveData<FilterCountryViewState> get() = _filtrationParams
 
     fun getCountryList() {
-         viewModelScope.launch {
-             val result = interactor.getAreas(true)
-             if(result.data != null) {
-                 _filtrationParams.postValue(FilterCountryViewState.CountryList(result.data))
-             } else if(result.resultCode != null) {
-                 when(result.resultCode) {
-                     SERVER_ERROR -> {
-                         // ошибка сервера
-                     }
-                     INTERNET_ERROR -> {
-                         // нет интернета
-                     }
-                 }
-             }
-         }
-     }
+        viewModelScope.launch {
+            val result = interactor.getAreas(true)
+            if (result.data != null) {
+                _filtrationParams.postValue(FilterCountryViewState.CountryList(result.data))
+            } else if (result.resultCode != null) {
+                when (result.resultCode) {
+                    SERVER_ERROR -> {
+                        // ошибка сервера
+                    }
+
+                    INTERNET_ERROR -> {
+                        // нет интернета
+                    }
+                }
+            }
+        }
+    }
 
 }
