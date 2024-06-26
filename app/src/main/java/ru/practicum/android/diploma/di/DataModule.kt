@@ -1,11 +1,13 @@
 package ru.practicum.android.diploma.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -34,6 +36,10 @@ val dataModule = module {
             SHARED_PREFERENCES,
             Context.MODE_PRIVATE
         )
+    }
+
+    single<SharedPreferences>(named("filter_prefs")) {
+        androidContext().getSharedPreferences("filter_prefs", Context.MODE_PRIVATE)
     }
 
     single<HeadHunterApi> {

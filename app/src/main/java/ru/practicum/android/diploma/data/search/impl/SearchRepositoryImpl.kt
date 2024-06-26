@@ -3,9 +3,9 @@ package ru.practicum.android.diploma.data.search.impl
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import ru.practicum.android.diploma.data.dto.VacancyRequest
 import ru.practicum.android.diploma.data.mappers.VacancyResponseToDomainMapper
 import ru.practicum.android.diploma.data.network.HeadHunterNetworkClient
 import ru.practicum.android.diploma.data.search.SearchRepository
@@ -22,21 +22,41 @@ class SearchRepositoryImpl(
     override var currentPage: Int? = null
     override var foundItems: Int? = null
     override var pages: Int? = null
-    override fun searchVacancies(text: String, page: Int): Flow<Resource<List<DomainVacancy>>> = flow {
+
+    override fun searchVacancies(
+        text: String,
+        page: Int,
+        filters: Map<String, String>?
+    ): Flow<Resource<List<DomainVacancy>>> = flow {
         if (!isConnected()) {
             emit(Resource.Error(INTERNET_ERROR))
         } else {
-            val response = networkClient.getVacancies(VacancyRequest(text, page).map())
-            if (response.isSuccessful) {
-                with(response.body()) {
-                    currentPage = this?.page
-                    foundItems = this?.found
-                    val data = this?.items?.let { converter.map(it) }
-                    this@SearchRepositoryImpl.pages = this?.pages
-                    emit(Resource.Success(data))
+            try {
+                val filterParams = mutableMapOf<String, String>()
+                filterParams["text"] = text
+                filterParams["page"] = page.toString()
+                filters?.let { filterParams.putAll(it.filter { it.value.isNotEmpty() }) }
+                Log.d("!!!", "SearchRepositoryImpl - Параметры запроса: $filterParams")
+
+                val response = networkClient.getVacancies(filterParams)
+
+                if (response.isSuccessful) {
+                    with(response.body()) {
+                        currentPage = this?.page
+                        foundItems = this?.found
+                        val data = this?.items?.let { converter.map(it) }
+                        this@SearchRepositoryImpl.pages = this?.pages
+                        emit(Resource.Success(data))
+
+                        Log.d("!!!", "SearchRepositoryImpl - Успешный ответ: ${data?.size} items")
+                    }
+                } else {
+                    Log.d("!!!", "SearchRepositoryImpl - Ошибка сервера: ${response.code()}")
+                    emit(Resource.Error(SERVER_ERROR))
                 }
-            } else {
-                emit(Resource.Error(SERVER_ERROR))
+            } catch (e: Exception) {
+                Log.d("!!!", "SearchRepositoryImpl - Исключение: ${e.message}")
+                emit(Resource.Error(INTERNET_ERROR))
             }
         }
     }
@@ -56,5 +76,4 @@ class SearchRepositoryImpl(
         }
         return isConnected
     }
-
 }

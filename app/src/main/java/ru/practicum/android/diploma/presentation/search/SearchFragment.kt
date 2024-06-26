@@ -1,13 +1,14 @@
 package ru.practicum.android.diploma.presentation.search
 
-import android.app.Activity
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -18,14 +19,16 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.search.models.DomainVacancy
+import ru.practicum.android.diploma.presentation.filtration.FilterChangeListener
 import ru.practicum.android.diploma.util.VACANCY_KEY
 
-class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
+class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface, FilterChangeListener {
 
     private val searchViewModel by viewModel<SearchViewModel>()
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private var vacancyAdapter: VacancyAdapter? = null
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,18 +36,15 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        sharedPreferences = requireContext().getSharedPreferences("filter_prefs", Context.MODE_PRIVATE)
         return binding.root
-    }
-
-    fun Fragment.hideKeyboard() {
-        val inputMethodManager =
-            requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        val view = activity?.currentFocus ?: View(requireContext())
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Установка фильтров из SharedPreferences
+        setFilterParameters()
 
         searchViewModel.trackListLiveData.observe(viewLifecycleOwner) {
             when (it) {
@@ -106,7 +106,14 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
 
     override fun onResume() {
         super.onResume()
+        setFilterParameters()
         searchViewModel.onResume()
+        binding.searchInput.text?.let {
+            if (it.isNotEmpty()) {
+                Log.d("!!!", "SearchFragment - Поиск с фильтрами: ${it}")
+                searchViewModel.searchDebounce(it.toString())
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -118,6 +125,24 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
         val bundle = Bundle()
         bundle.putParcelable(VACANCY_KEY, domainVacancy)
         findNavController().navigate(R.id.action_searchFragment_to_vacancyFragment, bundle)
+    }
+
+    // Установка фильтров из SharedPreferences
+    private fun setFilterParameters() {
+        val filterParams = loadCurrentFilterParameters()
+        searchViewModel.setFilterParameters(filterParams)
+        Log.d("!!!", "SearchFragment - Параметры фильтра установлены: $filterParams")
+    }
+
+    private fun loadCurrentFilterParameters(): Map<String, String> {
+        val filterParams = mutableMapOf<String, String>()
+        sharedPreferences.getString("area", null)?.takeIf { it.isNotEmpty() }?.let { filterParams["area"] = it }
+        sharedPreferences.getString("industry", null)?.takeIf { it.isNotEmpty() }?.let { filterParams["industry"] = it }
+        sharedPreferences.getString("salary", null)?.takeIf { it.isNotEmpty() }?.let { filterParams["salary"] = it }
+        if (sharedPreferences.getBoolean("only_with_salary", false)) {
+            filterParams["only_with_salary"] = "true"
+        }
+        return filterParams
     }
 
     private fun setStateNetworkError() {
@@ -212,4 +237,8 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
         const val WHITESPACE = " "
     }
 
+    override fun onFilterChanged(filterParams: Map<String, String>) {
+        Log.d("!!!", "SearchFragment - Фильтры изменены: $filterParams")
+        searchViewModel.setFilterParameters(filterParams)
+    }
 }

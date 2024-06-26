@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.di
 
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import ru.practicum.android.diploma.presentation.favorites.FavoritesViewModel
 import ru.practicum.android.diploma.presentation.filtration.FiltrationViewModel
@@ -13,7 +14,7 @@ import ru.practicum.android.diploma.presentation.vacancy.VacancyViewModel
 
 val appModule = module {
     viewModel<SearchViewModel> {
-        SearchViewModel(get(), get())
+        SearchViewModel(get(), get(), get(named("filter_prefs")))
     }
 
     viewModel<FavoritesViewModel> {

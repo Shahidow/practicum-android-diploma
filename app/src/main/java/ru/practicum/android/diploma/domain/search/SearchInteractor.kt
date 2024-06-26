@@ -7,5 +7,5 @@ interface SearchInteractor {
     var currentPage: Int?
     var foundItems: Int?
     var pages: Int?
-    fun searchVacancies(text: String, page: Int): Flow<Pair<List<DomainVacancy>?, Int?>>
+    fun searchVacancies(text: String, page: Int, filterParameters: Map<String, String>?): Flow<Pair<List<DomainVacancy>?, Int?>>
 }
