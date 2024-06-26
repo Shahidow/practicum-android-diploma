@@ -4,27 +4,13 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.ItemIndustryViewBinding
 import ru.practicum.android.diploma.domain.filtration.models.IndustryDomain
 
-class IndustryViewHolder(
-    private val binding: ItemIndustryViewBinding,
-    private val itemIndustryClickListener: IndustryAdapter.ItemIndustryClickInterface?,
-) : RecyclerView.ViewHolder(binding.root) {
-    private var itemIndustry: IndustryDomain? = null
+class IndustryViewHolder(private val binding: ItemIndustryViewBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
-    init {
-        itemView.setOnClickListener {
-            binding.radioButtonIndustry.setOnClickListener {
-                itemIndustry?.let { industry ->
-                    itemIndustryClickListener?.onItemIndustryClick(industry)
-                }
-            }
-            itemView.setOnClickListener(null)
-        }
-    }
+    val radioButtonIndustry = binding.radioButtonIndustry
 
-    fun bind(industry: IndustryDomain, isSelected: Boolean) {
-        itemIndustry = industry
+    fun bind(industry: IndustryDomain, selected: Boolean) {
+        binding.radioButtonIndustry.isChecked = selected
         binding.textViewIndustry.text = industry.name
-        binding.radioButtonIndustry.isChecked = isSelected
     }
 }
-

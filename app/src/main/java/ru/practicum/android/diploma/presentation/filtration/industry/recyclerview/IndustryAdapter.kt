@@ -7,42 +7,29 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.ItemIndustryViewBinding
 import ru.practicum.android.diploma.domain.filtration.models.IndustryDomain
 
-class IndustryAdapter(private val itemIndustryClickListener: ItemIndustryClickInterface) :
+class IndustryAdapter(val onItemIndustryClick: (IndustryDomain) -> Unit) :
     RecyclerView.Adapter<IndustryViewHolder>() {
-    private var industryList = arrayListOf<IndustryDomain>()
-    private var selectedIndustry: IndustryDomain? = null
-
+    var industriesList = mutableListOf<IndustryDomain>()
+    var selectedIndustry: IndustryDomain? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndustryViewHolder {
-        return IndustryViewHolder(
-            ItemIndustryViewBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-            itemIndustryClickListener
-        )
+        val binding = ItemIndustryViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return IndustryViewHolder(binding)
     }
 
-    override fun getItemCount() = if (selectedIndustry == null) industryList.size else 1
+    override fun getItemCount() = industriesList.size
 
-    override fun onBindViewHolder(holder: IndustryViewHolder, position: Int) {
-        val industry = selectedIndustry ?: industryList[position]
-        val isSelected = industry == selectedIndustry
-        holder.bind(industry, isSelected)
-        holder.itemView.visibility = if (selectedIndustry == null || isSelected) {
-            View.VISIBLE
-        } else {
-            View.GONE
+    override fun onBindViewHolder(industryViewHolder: IndustryViewHolder, position: Int) {
+        val industry = industriesList[position]
+
+        val listener = View.OnClickListener {
+            selectedIndustry = industry
+            notifyDataSetChanged()
+            onItemIndustryClick(industry)
         }
-    }
+        val selected = selectedIndustry?.id == industry.id
 
-    fun setIndustryList(industryList: List<IndustryDomain>) {
-        this.industryList = ArrayList(industryList)
-        notifyDataSetChanged()
-    }
-
-    fun setSelectedIndustry(selectedIndustry: IndustryDomain?) {
-        this.selectedIndustry = selectedIndustry
-        notifyDataSetChanged()
-    }
-
-    interface ItemIndustryClickInterface {
-        fun onItemIndustryClick(industry: IndustryDomain)
+        industryViewHolder.bind(industry, selected)
+        industryViewHolder.itemView.setOnClickListener(listener)
+        industryViewHolder.radioButtonIndustry.setOnClickListener(listener)
     }
 }

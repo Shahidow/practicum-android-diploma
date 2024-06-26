@@ -53,5 +53,4 @@ class FiltrationInteractorImpl(private val repository: FiltrationRepository) : F
         }
         return industriesList.sortedBy { it.name }
     }
-
 }
