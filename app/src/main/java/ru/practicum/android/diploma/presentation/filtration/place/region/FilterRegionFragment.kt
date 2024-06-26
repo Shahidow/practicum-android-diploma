@@ -1,28 +1,34 @@
 package ru.practicum.android.diploma.presentation.filtration.place.region
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterRegionBinding
-import ru.practicum.android.diploma.domain.filtration.models.FilterRegionArea
+import ru.practicum.android.diploma.domain.filtration.models.AreaDomain
+import ru.practicum.android.diploma.presentation.filtration.place.FilterPlaceAdapter
+import ru.practicum.android.diploma.ui.root.ActivityViewModel
 
 class FilterRegionFragment : Fragment() {
 
     private var _binding: FragmentFilterRegionBinding? = null
     private val binding get() = _binding!!
     private val filterRegionViewModel by viewModel<FilterRegionViewModel>()
-    // private var filterRegionAdapter: FilterRegionAdapter? = null
+    private var adapter: FilterPlaceAdapter? = null
+    private val activityViewModel: ActivityViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,16 +49,17 @@ class FilterRegionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val parentId: String? = activityViewModel.country.value?.id
+        Log.i("123", activityViewModel.country.value?.id.toString())
         observeViewState()
         prepareView()
-        filterRegionViewModel.getRegions()
-
-        // filterRegionAdapter =
-        //  FilterRegionAdapter(onItemRegionClick = { area -> onItemRegionClick(area) })
-        // binding.regionRecyclerView.adapter = filterRegionAdapter
+        filterRegionViewModel.getRegions(parentId)
+        adapter = FilterPlaceAdapter(onItemRegionClick = { area -> onItemRegionClick(area) })
+        binding.regionRecyclerView.adapter = adapter
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun prepareView() {
         binding.regionSelectionBackImageView.setOnClickListener { findNavController().navigateUp() }
         binding.iconRegionClear.setOnClickListener {
@@ -85,12 +92,12 @@ class FilterRegionFragment : Fragment() {
         }
     }
 
-    private fun setStateListOfRegion(listOfRegion: List<FilterRegionArea>) {
+    private fun setStateListOfRegion(listOfRegion: List<AreaDomain>) {
         binding.apply {
             regionRecyclerView.isVisible = true
             regionPlaceholderLayout.isVisible = false
-            // filterRegionAdapter?.setRegionList(listOfRegion)
         }
+        adapter?.setAreaList(listOfRegion)
     }
 
     private fun setStateListOfRegionIsEmpty() {
@@ -116,12 +123,11 @@ class FilterRegionFragment : Fragment() {
                 .into(regionPlaceholderImage)
         }
     }
-    /*
-        private fun onItemRegionClick(area: FilterRegionArea) {
-            filterRegionViewModel.insertFilterRegion(area)
-            findNavController().navigateUp()
-        }
-        */
+
+    private fun onItemRegionClick(area: AreaDomain) {
+        activityViewModel.region.value = area
+        findNavController().navigateUp()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

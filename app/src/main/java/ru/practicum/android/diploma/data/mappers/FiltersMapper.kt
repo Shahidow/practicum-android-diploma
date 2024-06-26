@@ -18,22 +18,34 @@ class FiltersMapper {
         }
     }
 
-    fun areaMap(areas: List<Areas>): List<AreaDomain> {
-        return areas.map {
-            AreaDomain(
-                id = it.id,
-                name = it.name,
-                parentId = it.parentId
-            )
-        }
-    }
-
     private fun industryItemMap(industries: List<IndustryItem>): List<IndustryDomain> {
         return industries.map {
             IndustryDomain(
                 id = it.id,
                 name = it.name,
                 industryList = emptyList()
+            )
+        }
+    }
+
+    fun areaMap(areas: List<Areas>): List<AreaDomain> {
+        return areas.map {
+            AreaDomain(
+                id = it.id,
+                name = it.name,
+                parentId = it.parentId,
+                areas = regionMap(it.areas)
+            )
+        }
+    }
+
+    private fun regionMap(areas: List<Areas>): List<AreaDomain> {
+        return areas.map {
+            AreaDomain(
+                id = it.id,
+                name = it.name,
+                parentId = it.parentId,
+                areas = emptyList()
             )
         }
     }

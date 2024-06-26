@@ -6,5 +6,5 @@ import ru.practicum.android.diploma.util.Resource
 
 interface FiltrationInteractor {
     suspend fun getIndustries(): Resource<List<IndustryDomain>>
-    suspend fun getAreas(): Resource<List<AreaDomain>>
+    suspend fun getAreas(isCountry: Boolean): Resource<List<AreaDomain>>
 }
