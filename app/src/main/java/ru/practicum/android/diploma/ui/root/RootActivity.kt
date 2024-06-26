@@ -30,7 +30,11 @@ class RootActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.filtrationFragment,
-                R.id.vacancyFragment -> {
+                R.id.vacancyFragment,
+                R.id.industryFragment,
+                R.id.filterPlaceFragment,
+                R.id.filterCountryFragment,
+                R.id.filterRegionFragment -> {
                     bottomNavigationView.visibility = View.GONE
                 }
 
