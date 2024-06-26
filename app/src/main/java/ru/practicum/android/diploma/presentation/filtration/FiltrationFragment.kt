@@ -61,7 +61,7 @@ class FiltrationFragment : Fragment() {
         viewModel.loadData()
 
         viewModel.workplace.observe(viewLifecycleOwner) { workplace ->
-            binding.filtrationWorkplaceInputLayout.text = workplace ?: ""
+            binding.filtrationWorkplaceEditText.text = (workplace ?: "") as Editable?
         }
 
         binding.resetButton.setOnClickListener {
