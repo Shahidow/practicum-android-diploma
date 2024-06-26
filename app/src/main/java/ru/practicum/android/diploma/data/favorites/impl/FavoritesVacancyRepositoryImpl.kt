@@ -50,4 +50,3 @@ class FavoritesVacancyRepositoryImpl(
         return appDatabase.favoriteVacancyDao().getFavoriteIds()
     }
 }
-

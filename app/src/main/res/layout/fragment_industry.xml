@@ -50,6 +50,7 @@
             android:id="@+id/industryInput"
             style="@style/search_industry_style"
             android:autofillHints="no"
+            android:focusable="true"
             android:hint="@string/enter_industry"
             android:textCursorDrawable="@drawable/cursor_for_edittext"
             app:layout_constraintBottom_toBottomOf="parent"
