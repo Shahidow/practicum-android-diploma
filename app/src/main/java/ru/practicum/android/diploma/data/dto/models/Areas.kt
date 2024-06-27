@@ -6,6 +6,5 @@ data class Areas(
     val id: String,
     val name: String,
     @SerializedName("parent_id")
-    val parentId: String?,
-    val areas: List<Areas>
+    val parentId: String?
 )
