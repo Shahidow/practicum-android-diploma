@@ -55,6 +55,10 @@ class FilterPlaceFragment : Fragment() {
         }
 
         binding.workplaceApplyButton.setOnClickListener {
+            activityViewModel.countryFilter.value = activityViewModel.country.value
+            if (activityViewModel.region.value != null) {
+                activityViewModel.regionFilter.value = activityViewModel.region.value
+            }
             findNavController().navigateUp()
         }
 
@@ -76,8 +80,6 @@ class FilterPlaceFragment : Fragment() {
         }
 
         binding.workplaceBackImageView.setOnClickListener {
-            activityViewModel.countryFilter.value = activityViewModel.country.value
-            activityViewModel.regionFilter.value = activityViewModel.region.value
             findNavController().navigateUp()
         }
     }

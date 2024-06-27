@@ -20,9 +20,9 @@ class FilterCountryFragment : Fragment() {
     private val binding get() = _binding!!
     private val filterCountryViewModel by viewModel<FilterCountryViewModel>()
     private val activityViewModel: ActivityViewModel by activityViewModels()
-
     private var adapter: FilterPlaceAdapter? = null
     private val tag: String = "filter_country"
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
