@@ -12,6 +12,7 @@ import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.presentation.vacancy.VacancyViewModel
 
 val appModule = module {
+
     viewModel<SearchViewModel> {
         SearchViewModel(get(), get())
     }
@@ -24,23 +25,20 @@ val appModule = module {
         VacancyViewModel(get(), get())
     }
 
-    viewModel<FiltrationViewModel> {
-        FiltrationViewModel()
-    }
     viewModel<IndustryViewModel> {
-        IndustryViewModel(get())
+        IndustryViewModel(get(), get(), get())
     }
 
     viewModel<FilterRegionViewModel> {
-        FilterRegionViewModel()
+        FilterRegionViewModel(get())
     }
 
     viewModel<FilterCountryViewModel> {
-        FilterCountryViewModel()
+        FilterCountryViewModel(get())
     }
 
     viewModel<IndustryViewModel> {
-        IndustryViewModel(get())
+        IndustryViewModel(get(), get(), get())
     }
 
     viewModel<FilterPlaceViewModel> {
@@ -48,7 +46,6 @@ val appModule = module {
     }
 
     viewModel<FiltrationViewModel> {
-        FiltrationViewModel()
+        FiltrationViewModel(get())
     }
 }
-

@@ -6,18 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentFilterCountryBinding
+import ru.practicum.android.diploma.domain.filtration.models.AreaDomain
+import ru.practicum.android.diploma.presentation.filtration.place.FilterPlaceAdapter
+import ru.practicum.android.diploma.ui.root.ActivityViewModel
 
 class FilterCountryFragment : Fragment() {
 
     private var _binding: FragmentFilterCountryBinding? = null
     private val binding get() = _binding!!
-
     private val filterCountryViewModel by viewModel<FilterCountryViewModel>()
-
-    // private var filterCountryAdapter: FilterCountryAdapter? = null
+    private val activityViewModel: ActivityViewModel by activityViewModels()
+    private var adapter: FilterPlaceAdapter? = null
     private val tag: String = "filter_country"
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -29,16 +34,10 @@ class FilterCountryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        filterCountryViewModel.getCountryList()
+        adapter = FilterPlaceAdapter(onItemRegionClick = { area -> onItemRegionClick(area) })
+        binding.countryRecyclerView.adapter = adapter
 
-        observeViewState()
-        // filterCountryViewModel.getCountryList()
-
-        // filterCountryAdapter = FilterCountryAdapter()
-        // filterCountryAdapter?.setInItemCountryClickListener(this)
-        // binding.countryRecyclerView.adapter = filterCountryAdapter
-    }
-
-    private fun observeViewState() {
         filterCountryViewModel.filtrationParams.observe(viewLifecycleOwner) { viewState ->
             when (viewState) {
                 is FilterCountryViewState.EmptyCountryList -> {
@@ -46,13 +45,21 @@ class FilterCountryFragment : Fragment() {
                 }
 
                 is FilterCountryViewState.CountryList -> {
-                    // filterCountryAdapter.setCountryList(viewState.countryList)
+                    adapter!!.setAreaList(viewState.countryList)
                 }
 
-                else -> { // это пустой метод}
+                else -> { // это пустой метод
                 }
             }
         }
+        binding.countryBackImageView.setOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun onItemRegionClick(area: AreaDomain) {
+        activityViewModel.country.value = area
+        findNavController().navigateUp()
     }
 
     override fun onDestroyView() {

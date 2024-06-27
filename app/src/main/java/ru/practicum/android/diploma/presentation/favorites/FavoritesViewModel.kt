@@ -44,4 +44,3 @@ class FavoritesViewModel(private val favoritesVacancyInteractor: FavoritesVacanc
 
     }
 }
-

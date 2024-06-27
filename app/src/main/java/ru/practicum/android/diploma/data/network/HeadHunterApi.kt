@@ -29,6 +29,6 @@ interface HeadHunterApi {
     suspend fun getIndustries(): Response<List<Industry>>
 
     @Headers("Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}", "User-Agent: DreamJob (shahidow@mail.com)")
-    @GET("industries")
+    @GET("areas")
     suspend fun getAreas(): Response<List<Areas>>
 }

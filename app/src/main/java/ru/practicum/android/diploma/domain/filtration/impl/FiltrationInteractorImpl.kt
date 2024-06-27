@@ -21,14 +21,29 @@ class FiltrationInteractorImpl(private val repository: FiltrationRepository) : F
         }
     }
 
-    override suspend fun getAreas(): Resource<List<AreaDomain>> {
+    override suspend fun getAreas(isCountry: Boolean): Resource<List<AreaDomain>> {
         val result = repository.getAreas()
         return when (result.resultCode) {
-            SUCCESS_CODE -> Resource.Success(result.data)
+            SUCCESS_CODE -> {
+                if (isCountry) {
+                    Resource.Success(result.data)
+                } else {
+                    Resource.Success(result.data?.let { getRegions(it) })
+                }
+            }
+
             INTERNET_ERROR -> Resource.Error(result.resultCode)
             SERVER_ERROR -> Resource.Error(result.resultCode)
             else -> Resource.Error(result.resultCode)
         }
+    }
+
+    private fun getRegions(areas: List<AreaDomain>): List<AreaDomain> {
+        val regionList = mutableListOf<AreaDomain>()
+        areas.forEach { item ->
+            regionList.addAll(item.areas)
+        }
+        return regionList.sortedBy { it.name }
     }
 
     private fun getDomainIndustries(industries: List<IndustryDomain>): List<IndustryDomain> {
@@ -38,5 +53,4 @@ class FiltrationInteractorImpl(private val repository: FiltrationRepository) : F
         }
         return industriesList.sortedBy { it.name }
     }
-
 }

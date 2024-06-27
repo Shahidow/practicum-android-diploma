@@ -6,45 +6,87 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.filtration.FiltrationInteractor
+import ru.practicum.android.diploma.domain.filtration.FiltrationParamsSaveInteractor
 import ru.practicum.android.diploma.domain.filtration.models.IndustryDomain
+import ru.practicum.android.diploma.util.Debounce
+import ru.practicum.android.diploma.util.Resource
+import java.net.HttpURLConnection
 
 class IndustryViewModel(
+    private val debounce: Debounce,
     private val industryInteractor: FiltrationInteractor,
+    private val filtrationParamsSaveInteractor: FiltrationParamsSaveInteractor
 ) : ViewModel() {
 
-    // Переменная для хранения списка отраслей
-    private val _industries = MutableLiveData<List<IndustryDomain>>()
-    val industries: LiveData<List<IndustryDomain>> get() = _industries
+    private var foundIndustries: MutableList<IndustryDomain>? = null
 
-    // Переменная для хранения выбранной отрасли
-    private val _selectedIndustry = MutableLiveData<IndustryDomain?>()
-    val selectedIndustry: LiveData<IndustryDomain?> get() = _selectedIndustry
+    private val _stateLiveData = MutableLiveData<FiltrationIndustryState>()
+    fun getState(): LiveData<FiltrationIndustryState> = _stateLiveData
 
-    init {
-        loadIndustries()
+    private fun filterIndustries(s: String) {
+        _stateLiveData.postValue(FiltrationIndustryState.Loading)
+        viewModelScope.launch {
+            val filteredIndustry = foundIndustries?.filter { it.name.contains(s, ignoreCase = true) }
+            if (filteredIndustry.isNullOrEmpty()) {
+                _stateLiveData.postValue(FiltrationIndustryState.Empty)
+            } else {
+                _stateLiveData.postValue(FiltrationIndustryState.Success(filteredIndustry))
+            }
+        }
     }
 
-    // Метод для загрузки отраслей
-    private fun loadIndustries() {
+    fun selectIndustry() {
+        _stateLiveData.postValue(FiltrationIndustryState.Selected)
+    }
+
+    fun searchDebounce(text: String) {
+        if (text.isEmpty()) {
+            debounce.cancel()
+        } else {
+            val debouncedFunction = debounce.debounceFunction<String>(SEARCH_DEBOUNCE_DELAY) { searchText ->
+                filterIndustries(searchText)
+            }
+            debouncedFunction(text)
+        }
+    }
+
+    fun getIndustries() {
+        _stateLiveData.postValue(FiltrationIndustryState.Loading)
         viewModelScope.launch {
-            val industries = industryInteractor.getIndustries()
-            if (industries.data != null) {
-                _industries.value = industries.data!!
+            val result = industryInteractor.getIndustries()
+            processData(result)
+        }
+    }
+
+    private fun processData(data: Resource<List<IndustryDomain>>) {
+        val industryList = mutableListOf<IndustryDomain>()
+        industryList.clear()
+        data.data?.let { industryList.addAll(it) }
+        when {
+            data.resultCode == -1 -> {
+                _stateLiveData.postValue(FiltrationIndustryState.InternetConnectionError)
             }
 
+            data.resultCode == HttpURLConnection.HTTP_BAD_REQUEST -> {
+                _stateLiveData.postValue(FiltrationIndustryState.ServerError)
+            }
+
+            industryList.isEmpty() -> {
+                _stateLiveData.postValue(FiltrationIndustryState.Empty)
+            }
+
+            else -> {
+                foundIndustries = industryList
+                _stateLiveData.postValue(FiltrationIndustryState.Success(industryList))
+            }
         }
     }
 
-    // Метод для установки выбранной отрасли
-    fun setSelectedIndustry(industry: IndustryDomain?) {
-        _selectedIndustry.value = industry
+    fun saveIndustryFilter(selectedIndustry: IndustryDomain) {
+        // Unfinished
     }
 
-    // Метод для фильтрации списка отраслей
-    fun filterIndustries(query: String) {
-        val filteredList = _industries.value?.filter {
-            it.name.contains(query, ignoreCase = true)
-        }
-        _industries.value = filteredList ?: emptyList()
+    companion object {
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }

@@ -3,25 +3,21 @@ package ru.practicum.android.diploma.presentation.filtration
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.practicum.android.diploma.domain.filtration.models.IndustryDomain
+import ru.practicum.android.diploma.domain.filtration.FiltrationParamsSaveInteractor
+import ru.practicum.android.diploma.domain.filtration.models.FilterParams
 
-class FiltrationViewModel : ViewModel() {
-    private val _industry = MutableLiveData<IndustryDomain?>()
-    val industry: LiveData<IndustryDomain?> get() = _industry
+class FiltrationViewModel(private val paramsInteractor: FiltrationParamsSaveInteractor) : ViewModel() {
 
-    private val _workplace = MutableLiveData<String?>()
-    val workplace: LiveData<String?> get() = _workplace
+    private var _filtersState = MutableLiveData<FilterParams?>()
+    val filtersState: LiveData<FilterParams?> = _filtersState
 
-//    fun setIndustry(industry: IndustryGroup) {
-//        _industry.value = industry
-//    }
-//
-//    fun setWorkplace(workplace: String) {
-//        _workplace.value = workplace
-//    }
-
-    fun resetFilters() {
-        _industry.value = null
-        _workplace.value = null
+    fun getData() {
+        val filters = paramsInteractor.getFilterParams()
+        _filtersState.postValue(filters)
     }
+
+    fun setData(filters: FilterParams) {
+        paramsInteractor.saveFilterParams(filters)
+    }
+
 }

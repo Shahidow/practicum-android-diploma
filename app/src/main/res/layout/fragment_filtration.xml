@@ -32,10 +32,7 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/height_60"
         android:layout_marginTop="36dp"
-        android:layout_marginEnd="@dimen/indent_16"
         android:background="?attr/colorSecondary"
-        android:clickable="true"
-        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/filtrationHeader">
@@ -53,10 +50,10 @@
             app:boxBackgroundColor="?attr/colorSecondary"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/workplaceArrowForward"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/filtrationWorkplaceEditText"
@@ -76,15 +73,15 @@
 
         <ImageView
             android:id="@+id/workplaceArrowForward"
-            android:layout_width="20dp"
-            android:layout_height="19dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/indent_16"
             android:contentDescription="@string/filtering_settings"
             android:src="@drawable/baseline_arrow_forward"
             android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Обертка для "Отрасль" -->
@@ -92,46 +89,71 @@
         android:id="@+id/industryContainer"
         android:layout_width="0dp"
         android:layout_height="@dimen/height_60"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="@dimen/indent_16"
         android:background="?attr/colorSecondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/workplaceContainer">
 
-        <TextView
-            android:id="@+id/filtrationIndustryText"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/filtrationIndustryInputLayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginEnd="36dp"
             android:background="?attr/colorSecondary"
+            android:ellipsize="end"
             android:hint="@string/industry"
+            android:imeOptions="actionDone|flagNoExtractUi"
+            android:textAlignment="viewStart"
             android:textColorHint="@color/gray"
-            android:fontFamily="@font/ys_display_regular"
-            android:lines="1"
-            android:paddingLeft="16dp"
-            android:paddingTop="21dp"
-            android:singleLine="true"
-            android:textColor="?attr/colorOnPrimary"
-            android:textSize="@dimen/text_size_16"
             app:boxBackgroundColor="?attr/colorSecondary"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/industryArrowForward"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/filtrationIndustryEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:fontFamily="@font/ys_display_regular"
+                android:inputType="textCapSentences"
+                android:lines="1"
+                android:singleLine="true"
+                android:textAlignment="viewStart"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="@dimen/text_size_16"
+                tools:ignore="VisualLintTextFieldSize" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
         <ImageView
             android:id="@+id/industryArrowForward"
-            android:layout_width="20dp"
-            android:layout_height="19dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/indent_16"
             android:contentDescription="@string/filtering_settings"
             android:src="@drawable/baseline_arrow_forward"
             android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/industryClear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/indent_16"
+            android:contentDescription="@string/filtering_settings"
+            android:src="@drawable/baseline_close_24"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -163,8 +185,8 @@
             android:textColor="@color/black"
             android:textColorHint="?attr/colorPrimaryVariant"
             android:textSize="@dimen/text_size_16"
-            tools:text="40000"
-            tools:ignore="VisualLintTextFieldSize" />
+            tools:ignore="VisualLintTextFieldSize"
+            tools:text="40000" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
@@ -217,7 +239,7 @@
         android:textAllCaps="false"
         android:textColor="@color/red"
         android:textSize="@dimen/text_size_16"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -234,7 +256,7 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_16"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/resetButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
