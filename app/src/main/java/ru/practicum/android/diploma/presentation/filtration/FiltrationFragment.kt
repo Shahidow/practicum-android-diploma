@@ -42,16 +42,16 @@ class FiltrationFragment : Fragment() {
 
         viewModel.filtersState.observe(viewLifecycleOwner) { filters ->
             if (filters != null) {
-                if(activityViewModel.countryFilter.value == null) {
+                if (activityViewModel.countryFilter.value == null) {
                     activityViewModel.countryFilter.value = filters.country
                 }
-                if(activityViewModel.regionFilter.value == null) {
+                if (activityViewModel.regionFilter.value == null) {
                     activityViewModel.regionFilter.value = filters.region
                 }
-                if(activityViewModel.industry.value == null) {
+                if (activityViewModel.industry.value == null) {
                     activityViewModel.industry.value = filters.industry
                 }
-                if(filters.salary != null) {
+                if (filters.salary != null) {
                     binding.expectedSalaryEditText.setText(filters.salary.toString())
                 }
                 binding.noSalaryCheckBox.isChecked = filters.showOnlyWithSalary
