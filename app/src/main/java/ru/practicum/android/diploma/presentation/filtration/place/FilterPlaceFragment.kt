@@ -38,21 +38,7 @@ class FilterPlaceFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activityViewModel.country.observe(viewLifecycleOwner) { country ->
-            if (country != null) {
-                onCountrySelected(country.name)
-            } else {
-                onCountryCleared()
-            }
-        }
-
-        activityViewModel.region.observe(viewLifecycleOwner) { area ->
-            if (area != null) {
-                onRegionSelected(area.name)
-            } else {
-                onRegionCleared()
-            }
-        }
+        setObservers()
 
         binding.workplaceApplyButton.setOnClickListener {
             activityViewModel.countryFilter.value = activityViewModel.country.value
@@ -81,6 +67,24 @@ class FilterPlaceFragment : Fragment() {
 
         binding.workplaceBackImageView.setOnClickListener {
             findNavController().navigateUp()
+        }
+    }
+
+    private fun setObservers() {
+        activityViewModel.country.observe(viewLifecycleOwner) { country ->
+            if (country != null) {
+                onCountrySelected(country.name)
+            } else {
+                onCountryCleared()
+            }
+        }
+
+        activityViewModel.region.observe(viewLifecycleOwner) { area ->
+            if (area != null) {
+                onRegionSelected(area.name)
+            } else {
+                onRegionCleared()
+            }
         }
     }
 

@@ -5,7 +5,6 @@ import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,13 +49,11 @@ class FilterRegionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val parentId: String? = activityViewModel.country.value?.id
-        Log.i("123", activityViewModel.country.value?.id.toString())
         observeViewState()
         prepareView()
         filterRegionViewModel.getRegions(parentId)
         adapter = FilterPlaceAdapter(onItemRegionClick = { area -> onItemRegionClick(area) })
         binding.regionRecyclerView.adapter = adapter
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -66,14 +63,8 @@ class FilterRegionFragment : Fragment() {
             binding.regionInput.setText("")
         }
         binding.regionInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                // Метод пустой, но обязателен к реализации
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                // Метод пустой, но обязателен к реализации
-            }
-
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
+            override fun afterTextChanged(p0: Editable?) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.iconRegionSearch.isVisible = s.isNullOrEmpty()
                 binding.iconRegionClear.isVisible = !s.isNullOrEmpty()
