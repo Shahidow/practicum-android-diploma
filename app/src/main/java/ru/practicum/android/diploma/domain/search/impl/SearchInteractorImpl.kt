@@ -12,7 +12,11 @@ class SearchInteractorImpl(private val repository: SearchRepository) : SearchInt
     override var currentPage: Int? = null
     override var foundItems: Int? = null
     override var pages: Int? = null
-    override fun searchVacancies(text: String, page: Int, filters: FilterParams?): Flow<Pair<List<DomainVacancy>?, Int?>> {
+    override fun searchVacancies(
+        text: String,
+        page: Int,
+        filters: FilterParams?,
+    ): Flow<Pair<List<DomainVacancy>?, Int?>> {
         val filtersMap = filtersToMap(filters)
         return repository.searchVacancies(text, page, filtersMap).map { result ->
             when (result) {
@@ -22,6 +26,7 @@ class SearchInteractorImpl(private val repository: SearchRepository) : SearchInt
                     pages = repository.pages
                     Pair(result.data, null)
                 }
+
                 is Resource.Error -> {
                     Pair(null, result.resultCode)
                 }
@@ -30,17 +35,17 @@ class SearchInteractorImpl(private val repository: SearchRepository) : SearchInt
     }
 
     private fun filtersToMap(filters: FilterParams?): Map<String, String>? {
-        if(filters != null) {
+        if (filters != null) {
             val options: HashMap<String, String> = HashMap()
-            if(filters.region != null) {
+            if (filters.region != null) {
                 options["area"] = filters.region.id
-            } else if(filters.country != null) {
+            } else if (filters.country != null) {
                 options["area"] = filters.country.id
             }
-            if(filters.industry != null) {
+            if (filters.industry != null) {
                 options["industry"] = filters.industry.id
             }
-            if(filters.salary != null) {
+            if (filters.salary != null) {
                 options["salary"] = filters.salary.toString()
             }
             options["only_with_salary"] = filters.showOnlyWithSalary.toString()
