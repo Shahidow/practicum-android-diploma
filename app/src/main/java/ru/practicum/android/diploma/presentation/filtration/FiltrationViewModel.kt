@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.practicum.android.diploma.domain.filtration.FiltrationParamsSaveInteractor
 import ru.practicum.android.diploma.domain.filtration.models.FilterParams
-import ru.practicum.android.diploma.presentation.search.SearchState
 
 class FiltrationViewModel(private val paramsInteractor: FiltrationParamsSaveInteractor) : ViewModel() {
 
