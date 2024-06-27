@@ -66,14 +66,8 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
         }
 
         binding.searchInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                // Метод пустой, но обязателен к реализации
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                // Метод пустой, но обязателен к реализации
-            }
-
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
+            override fun afterTextChanged(p0: Editable?) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.iconSearch.isVisible = s.isNullOrEmpty()
                 binding.iconClear.isVisible = !s.isNullOrEmpty()
