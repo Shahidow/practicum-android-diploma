@@ -52,6 +52,9 @@ class FilterCountryFragment : Fragment() {
                 }
             }
         }
+        binding.countryBackImageView.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun onItemRegionClick(area: AreaDomain) {
