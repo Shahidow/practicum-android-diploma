@@ -17,16 +17,20 @@ import ru.practicum.android.diploma.util.SERVER_ERROR
 class SearchRepositoryImpl(
     private val networkClient: HeadHunterNetworkClient,
     private val context: Context,
-    private val converter: VacancyResponseToDomainMapper
+    private val converter: VacancyResponseToDomainMapper,
 ) : SearchRepository {
     override var currentPage: Int? = null
     override var foundItems: Int? = null
     override var pages: Int? = null
-    override fun searchVacancies(text: String, page: Int): Flow<Resource<List<DomainVacancy>>> = flow {
+    override fun searchVacancies(
+        text: String,
+        page: Int,
+        filters: Map<String, String>?,
+    ): Flow<Resource<List<DomainVacancy>>> = flow {
         if (!isConnected()) {
             emit(Resource.Error(INTERNET_ERROR))
         } else {
-            val response = networkClient.getVacancies(VacancyRequest(text, page).map())
+            val response = networkClient.getVacancies(VacancyRequest(text, page, filters).map())
             if (response.isSuccessful) {
                 with(response.body()) {
                     currentPage = this?.page
