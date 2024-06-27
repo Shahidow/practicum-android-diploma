@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.presentation.filtration.industry
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -17,22 +19,21 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentIndustryBinding
 import ru.practicum.android.diploma.domain.filtration.models.IndustryDomain
 import ru.practicum.android.diploma.presentation.filtration.industry.recyclerview.IndustryAdapter
+import ru.practicum.android.diploma.ui.root.ActivityViewModel
 
 class IndustryFragment : Fragment() {
 
     private var _binding: FragmentIndustryBinding? = null
     private val binding get() = _binding!!
-
     private var selectedIndustry: IndustryDomain? = null
-
     private val adapter = IndustryAdapter {
         selectedIndustry = it
         hideKeyboard()
         viewModel.selectIndustry()
     }
-
     private val viewModel: IndustryViewModel by viewModel()
     private var allIndustries: List<IndustryDomain>? = null
+    private val activityViewModel: ActivityViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,6 +44,7 @@ class IndustryFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -56,7 +58,7 @@ class IndustryFragment : Fragment() {
         }
 
         binding.industrySelectionBackImageView.setOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigateUp()
         }
 
         binding.industryInput.addTextChangedListener(textWatcherListener())
@@ -71,8 +73,8 @@ class IndustryFragment : Fragment() {
         }
 
         binding.industryApplyButton.setOnClickListener {
-            selectedIndustry?.let { viewModel.saveIndustryFilter(it) }
-            findNavController().popBackStack()
+            selectedIndustry?.let { activityViewModel.industry.value = it }
+            findNavController().navigateUp()
         }
     }
 
