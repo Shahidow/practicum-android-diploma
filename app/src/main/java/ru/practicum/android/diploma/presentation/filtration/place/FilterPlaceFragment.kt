@@ -51,21 +51,24 @@ class FilterPlaceFragment : Fragment() {
         binding.countryClearImageView.setOnClickListener {
             activityViewModel.country.value = null
             activityViewModel.region.value = null
+            binding.workplaceApplyButton.isVisible = false
         }
 
         binding.regionClearImageView.setOnClickListener {
             activityViewModel.region.value = null
         }
 
-        binding.countrySelectionArrowForward.setOnClickListener {
+        binding.countrySelectionEditText.setOnClickListener {
             findNavController().navigate(R.id.action_filterPlaceFragment_to_filterCountryFragment)
         }
 
-        binding.regionArrowForward.setOnClickListener {
+        binding.regionEditText.setOnClickListener {
             findNavController().navigate(R.id.action_filterPlaceFragment_to_filterRegionFragment)
         }
 
         binding.workplaceBackImageView.setOnClickListener {
+            activityViewModel.country.value = activityViewModel.countryFilter.value
+            activityViewModel.region.value = activityViewModel.regionFilter.value
             findNavController().navigateUp()
         }
     }
@@ -108,6 +111,7 @@ class FilterPlaceFragment : Fragment() {
         binding.workplaceApplyButton.isVisible = true
         binding.regionArrowForward.isVisible = false
         binding.regionClearImageView.isVisible = true
+
     }
 
     @SuppressLint("SetTextI18n")

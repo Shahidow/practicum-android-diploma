@@ -19,6 +19,6 @@ open class ActivityViewModel : ViewModel() {
         MutableLiveData<AreaDomain>()
     }
     val industry: MutableLiveData<IndustryDomain> by lazy {
-        MutableLiveData<IndustryDomain> ()
+        MutableLiveData<IndustryDomain>()
     }
 }

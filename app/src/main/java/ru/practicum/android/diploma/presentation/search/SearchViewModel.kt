@@ -99,5 +99,8 @@ class SearchViewModel(
 
     fun onResume() {
         IsLastPage.IS_LAST_PAGE = true
+        currentPage = 0
+        vacanciesList.clear()
+        searchText?.let { searchVacancy(it) }
     }
 }
