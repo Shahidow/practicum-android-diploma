@@ -6,12 +6,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.domain.filtration.FiltrationParamsSaveInteractor
 import ru.practicum.android.diploma.domain.search.SearchInteractor
 import ru.practicum.android.diploma.domain.search.models.DomainVacancy
 import ru.practicum.android.diploma.util.Debounce
 import ru.practicum.android.diploma.util.INTERNET_ERROR
+import ru.practicum.android.diploma.util.IsLastPage
 
-class SearchViewModel(private val debounce: Debounce, private val searchInteractor: SearchInteractor) : ViewModel() {
+class SearchViewModel(
+    private val debounce: Debounce,
+    private val searchInteractor: SearchInteractor,
+    private val filtersInteractor: FiltrationParamsSaveInteractor,
+) : ViewModel() {
 
     private var searchText: String? = null
     private var searchState = MutableLiveData<SearchState>()
@@ -52,7 +58,7 @@ class SearchViewModel(private val debounce: Debounce, private val searchInteract
 
         viewModelScope.launch {
             searchInteractor
-                .searchVacancies(text, currentPage)
+                .searchVacancies(text, currentPage, filtersInteractor.getFilterParams())
                 .collect { pair -> processResult(pair.first, pair.second) }
             maxPages = searchInteractor.pages ?: 0
         }
@@ -83,10 +89,18 @@ class SearchViewModel(private val debounce: Debounce, private val searchInteract
     fun onLastItemReached() {
         if (!isNextPageLoading) {
             currentPage++
-            if (maxPages >= currentPage + 1) {
+            IsLastPage.IS_LAST_PAGE = currentPage == maxPages - 1
+            if (maxPages > currentPage) {
                 isNextPageLoading = true
                 searchText?.let { searchVacancy(it) }
             }
         }
+    }
+
+    fun onResume() {
+        IsLastPage.IS_LAST_PAGE = true
+        currentPage = 0
+        vacanciesList.clear()
+        searchText?.let { searchVacancy(it) }
     }
 }

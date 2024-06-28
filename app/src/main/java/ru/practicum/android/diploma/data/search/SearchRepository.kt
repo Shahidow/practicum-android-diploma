@@ -8,5 +8,5 @@ interface SearchRepository {
     var currentPage: Int?
     var foundItems: Int?
     var pages: Int?
-    fun searchVacancies(text: String, page: Int): Flow<Resource<List<DomainVacancy>>>
+    fun searchVacancies(text: String, page: Int, filters: Map<String, String>?): Flow<Resource<List<DomainVacancy>>>
 }

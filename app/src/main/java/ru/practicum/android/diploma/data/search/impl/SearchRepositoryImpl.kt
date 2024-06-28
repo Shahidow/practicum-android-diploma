@@ -22,11 +22,15 @@ class SearchRepositoryImpl(
     override var currentPage: Int? = null
     override var foundItems: Int? = null
     override var pages: Int? = null
-    override fun searchVacancies(text: String, page: Int): Flow<Resource<List<DomainVacancy>>> = flow {
+    override fun searchVacancies(
+        text: String,
+        page: Int,
+        filters: Map<String, String>?,
+    ): Flow<Resource<List<DomainVacancy>>> = flow {
         if (!isConnected()) {
             emit(Resource.Error(INTERNET_ERROR))
         } else {
-            val response = networkClient.getVacancies(VacancyRequest(text, page).map())
+            val response = networkClient.getVacancies(VacancyRequest(text, page, filters).map())
             if (response.isSuccessful) {
                 with(response.body()) {
                     currentPage = this?.page
