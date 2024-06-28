@@ -7,7 +7,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -40,18 +39,19 @@ class FiltrationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getData()
-
+        viewModel.resetButtonState.observe(viewLifecycleOwner) { binding.resetButton.isVisible = !it }
+        viewModel.comparisonState.observe(viewLifecycleOwner) { binding.applyButton.isVisible = !it }
         viewModel.filtersState.observe(viewLifecycleOwner) { setFiltersFromSharedPrefs(it) }
         activityViewModel.countryFilter.observe(viewLifecycleOwner) { setCountry(it) }
         activityViewModel.regionFilter.observe(viewLifecycleOwner) { setRegion(it) }
         activityViewModel.industry.observe(viewLifecycleOwner) { setIndustry(it) }
         binding.resetButton.setOnClickListener { clearFilters() }
-        binding.applyButton.setOnClickListener { saveFIlters() }
+        binding.applyButton.setOnClickListener { saveFilters() }
 
         binding.filtrationBackImageView.setOnClickListener {
             findNavController().navigateUp()
         }
-        binding.workplaceContainer.setOnClickListener {
+        binding.filtrationWorkplaceEditText.setOnClickListener {
             findNavController().navigate(R.id.action_filtrationFragment_to_filterPlaceFragment)
         }
         binding.filtrationIndustryEditText.setOnClickListener {
@@ -62,14 +62,43 @@ class FiltrationFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun afterTextChanged(s: Editable?) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val industryName: String = (binding.filtrationIndustryEditText as TextView).text.toString()
-                binding.industryArrowForward.isVisible = industryName.isEmpty()
-                binding.industryClear.isVisible = industryName.isNotEmpty()
+                binding.industryArrowForward.isVisible = s.isNullOrEmpty()
+                binding.industryClear.isVisible = !s.isNullOrEmpty()
             }
         })
 
         binding.industryClear.setOnClickListener {
             activityViewModel.industry.value = null
+        }
+
+        binding.filtrationWorkplaceEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun afterTextChanged(s: Editable?) = Unit
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.workplaceArrowForward.isVisible = s.isNullOrEmpty()
+                binding.workplaceClear.isVisible = !s.isNullOrEmpty()
+            }
+        })
+
+        binding.workplaceClear.setOnClickListener {
+            activityViewModel.countryFilter.value = null
+            activityViewModel.regionFilter.value = null
+            activityViewModel.country.value = null
+            activityViewModel.region.value = null
+        }
+
+        binding.expectedSalaryEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun afterTextChanged(s: Editable?) = Unit
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                compareFilters()
+                resetButtonVisibility()
+            }
+        })
+
+        binding.noSalaryCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
+            compareFilters()
+            resetButtonVisibility()
         }
     }
 
@@ -91,6 +120,28 @@ class FiltrationFragment : Fragment() {
         }
     }
 
+    private fun resetButtonVisibility() {
+        val filters = FilterParams(
+            activityViewModel.countryFilter.value,
+            activityViewModel.regionFilter.value,
+            activityViewModel.industry.value,
+            binding.expectedSalaryEditText.text.toString().toIntOrNull(),
+            binding.noSalaryCheckBox.isChecked
+        )
+        viewModel.resetButtonVisibility(filters)
+    }
+
+    private fun compareFilters() {
+        val filters = FilterParams(
+            activityViewModel.countryFilter.value,
+            activityViewModel.regionFilter.value,
+            activityViewModel.industry.value,
+            binding.expectedSalaryEditText.text.toString().toIntOrNull(),
+            binding.noSalaryCheckBox.isChecked
+        )
+        viewModel.compareFilters(filters)
+    }
+
     @SuppressLint("SetTextI18n")
     private fun setCountry(country: AreaDomain?) {
         if (country != null) {
@@ -98,6 +149,8 @@ class FiltrationFragment : Fragment() {
         } else {
             binding.filtrationWorkplaceEditText.setText("")
         }
+        compareFilters()
+        resetButtonVisibility()
     }
 
     @SuppressLint("SetTextI18n")
@@ -112,6 +165,8 @@ class FiltrationFragment : Fragment() {
         } else {
             binding.filtrationWorkplaceEditText.setText("$editText, ${region.name}")
         }
+        compareFilters()
+        resetButtonVisibility()
     }
 
     @SuppressLint("SetTextI18n")
@@ -121,6 +176,8 @@ class FiltrationFragment : Fragment() {
         } else {
             binding.filtrationIndustryEditText.setText("")
         }
+        compareFilters()
+        resetButtonVisibility()
     }
 
     @SuppressLint("SetTextI18n")
@@ -134,9 +191,11 @@ class FiltrationFragment : Fragment() {
         binding.noSalaryCheckBox.isChecked = false
         binding.applyButton.isVisible = false
         binding.resetButton.isVisible = false
+        compareFilters()
+        resetButtonVisibility()
     }
 
-    private fun saveFIlters() {
+    private fun saveFilters() {
         val filters = FilterParams(
             activityViewModel.countryFilter.value,
             activityViewModel.regionFilter.value,
