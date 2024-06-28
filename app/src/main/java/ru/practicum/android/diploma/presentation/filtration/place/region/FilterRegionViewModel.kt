@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.presentation.filtration.place.region
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -39,7 +38,6 @@ class FilterRegionViewModel(private val interactor: FiltrationInteractor) : View
             val result = interactor.getAreas(false)
             if (result.data != null) {
                 regionList = result.data
-                Log.i("123", parentId.toString())
                 if (parentId != null) {
                     regionList = filterRegions(parentId, regionList)
                     _filterRegionState.postValue(FilterRegionViewState.ListOfRegion(regionList))
