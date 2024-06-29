@@ -38,13 +38,7 @@ class FiltrationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getData()
-        viewModel.resetButtonState.observe(viewLifecycleOwner) { binding.resetButton.isVisible = !it }
-        viewModel.comparisonState.observe(viewLifecycleOwner) { binding.applyButton.isVisible = !it }
-        viewModel.filtersState.observe(viewLifecycleOwner) { setFiltersFromSharedPrefs(it) }
-        activityViewModel.countryFilter.observe(viewLifecycleOwner) { setCountry(it) }
-        activityViewModel.regionFilter.observe(viewLifecycleOwner) { setRegion(it) }
-        activityViewModel.industry.observe(viewLifecycleOwner) { setIndustry(it) }
+        observeChanges()
         binding.resetButton.setOnClickListener { clearFilters() }
         binding.applyButton.setOnClickListener { saveFilters() }
 
@@ -100,6 +94,16 @@ class FiltrationFragment : Fragment() {
             compareFilters()
             resetButtonVisibility()
         }
+    }
+
+    private fun observeChanges() {
+        viewModel.getData()
+        viewModel.resetButtonState.observe(viewLifecycleOwner) { binding.resetButton.isVisible = !it }
+        viewModel.comparisonState.observe(viewLifecycleOwner) { binding.applyButton.isVisible = !it }
+        viewModel.filtersState.observe(viewLifecycleOwner) { setFiltersFromSharedPrefs(it) }
+        activityViewModel.countryFilter.observe(viewLifecycleOwner) { setCountry(it) }
+        activityViewModel.regionFilter.observe(viewLifecycleOwner) { setRegion(it) }
+        activityViewModel.industry.observe(viewLifecycleOwner) { setIndustry(it) }
     }
 
     private fun setFiltersFromSharedPrefs(filters: FilterParams?) {
@@ -211,5 +215,4 @@ class FiltrationFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }
