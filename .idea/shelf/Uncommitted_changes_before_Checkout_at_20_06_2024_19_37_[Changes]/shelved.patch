@@ -1,0 +1,108 @@
+Index: app/src/main/java/ru/practicum/android/diploma/presentation/favorites/FavoritesFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package ru.practicum.android.diploma.presentation.favorites\r\n\r\nimport android.os.Bundle\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport androidx.fragment.app.Fragment\r\nimport androidx.navigation.fragment.findNavController\r\nimport ru.practicum.android.diploma.R\r\nimport ru.practicum.android.diploma.databinding.FragmentFavoritesBinding\r\nimport ru.practicum.android.diploma.domain.models.Vacancy\r\nimport ru.practicum.android.diploma.util.VACANCY_KEY\r\n\r\nclass FavoritesFragment : Fragment() {\r\n\r\n    private var _binding: FragmentFavoritesBinding? = null\r\n    private val binding get() = _binding!!\r\n\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater,\r\n        container: ViewGroup?,\r\n        savedInstanceState: Bundle?,\r\n    ): View? {\r\n        _binding = FragmentFavoritesBinding.inflate(inflater, container, false)\r\n        return binding.root\r\n    }\r\n\r\n    override fun onDestroyView() {\r\n        super.onDestroyView()\r\n        _binding = null\r\n    }\r\n\r\n    fun goToVacancyFragment(vacancy: Vacancy) {\r\n        val bundle = Bundle()\r\n        bundle.putParcelable(VACANCY_KEY, vacancy)\r\n        findNavController().navigate(R.id.action_favoritesFragment_to_vacancyFragment, bundle)\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ru/practicum/android/diploma/presentation/favorites/FavoritesFragment.kt b/app/src/main/java/ru/practicum/android/diploma/presentation/favorites/FavoritesFragment.kt
+--- a/app/src/main/java/ru/practicum/android/diploma/presentation/favorites/FavoritesFragment.kt	
++++ b/app/src/main/java/ru/practicum/android/diploma/presentation/favorites/FavoritesFragment.kt	
+@@ -6,16 +6,21 @@
+ import android.view.ViewGroup
+ import androidx.fragment.app.Fragment
+ import androidx.navigation.fragment.findNavController
++import com.bumptech.glide.Glide
++import org.koin.androidx.viewmodel.ext.android.viewModel
+ import ru.practicum.android.diploma.R
+ import ru.practicum.android.diploma.databinding.FragmentFavoritesBinding
++import ru.practicum.android.diploma.domain.models.FavoritesVacancyViewState
+ import ru.practicum.android.diploma.domain.models.Vacancy
++import ru.practicum.android.diploma.presentation.search.VacancyAdapter
+ import ru.practicum.android.diploma.util.VACANCY_KEY
+ 
+-class FavoritesFragment : Fragment() {
++class FavoritesFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
+ 
+     private var _binding: FragmentFavoritesBinding? = null
+     private val binding get() = _binding!!
+-
++    private val vm by viewModel<FavoritesViewModel>()
++    private var favoriteVacancyAdapter: VacancyAdapter? = null
+     override fun onCreateView(
+         inflater: LayoutInflater,
+         container: ViewGroup?,
+@@ -25,14 +30,73 @@
+         return binding.root
+     }
+ 
++    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
++        super.onViewCreated(view, savedInstanceState)
++
++        observeViewState()
++
++        favoriteVacancyAdapter = VacancyAdapter()
++        favoriteVacancyAdapter?.setInItemVacancyClickListener(this)
++        binding.favoriteRecyclerView.adapter = favoriteVacancyAdapter
++    }
++
+     override fun onDestroyView() {
+         super.onDestroyView()
+         _binding = null
+     }
+ 
++    override fun onResume() {
++        super.onResume()
++        vm.getAllFavoritesVacancy()
++    }
++
++    fun observeViewState() {
++        vm.favoriteVacancyScreenState.observe(viewLifecycleOwner) {
++            when (it) {
++                is FavoritesVacancyViewState.FavoritesVacancyError -> {
++
++                    binding.favoritePlaceholderLayout.visibility = View.VISIBLE
++                    binding.favoriteRecyclerView.visibility = View.INVISIBLE
++                    Glide.with(this)
++                        .load(R.drawable.placeholder_cat)
++                        .centerCrop()
++                        .into(binding.favoritePlaceholderImage)
++                    binding.favoritePlaceholderMessage.text = this.getString(R.string.count_get_list_of_vacancies)
++                }
++
++                is FavoritesVacancyViewState.FavoritesVacancyEmptyDataResult -> {
++
++                    binding.favoritePlaceholderLayout.visibility = View.VISIBLE
++                    binding.favoriteRecyclerView.visibility = View.INVISIBLE
++                    Glide.with(this)
++                        .load(R.drawable.placeholder_empty_list)
++                        .centerCrop()
++                        .into(binding.favoritePlaceholderImage)
++                    binding.favoritePlaceholderMessage.text = this.getString(R.string.empty_list)
++
++                }
++
++                is FavoritesVacancyViewState.FavoritesVacancyDataResult -> {
++
++                    binding.favoritePlaceholderLayout.visibility = View.INVISIBLE
++                    binding.favoriteRecyclerView.visibility = View.VISIBLE
++                    favoriteVacancyAdapter?.setVacancyList(ArrayList(it.listOfFavoriteVacancy))
++
++                }
++
++                else -> { // это пустой метод
++                }
++            }
++        }
++    }
++
+     fun goToVacancyFragment(vacancy: Vacancy) {
+         val bundle = Bundle()
+         bundle.putParcelable(VACANCY_KEY, vacancy)
+         findNavController().navigate(R.id.action_favoritesFragment_to_vacancyFragment, bundle)
+     }
++
++    override fun onItemVacancyClick(vacancy: Vacancy) {
++        goToVacancyFragment(vacancy)
++    }
+ }
