@@ -28,7 +28,6 @@ class FilterRegionFragment : Fragment() {
     private val filterRegionViewModel by viewModel<FilterRegionViewModel>()
     private var adapter: FilterPlaceAdapter? = null
     private val activityViewModel: ActivityViewModel by activityViewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -76,6 +75,7 @@ class FilterRegionFragment : Fragment() {
     private fun observeViewState() {
         filterRegionViewModel.filterRegionState.observe(viewLifecycleOwner) {
             when (it) {
+                is FilterRegionViewState.NoInternetConnection -> setStateNoInternetConnection()
                 is FilterRegionViewState.NotFoundRegionInRegionInList -> setStateNotFoundRegionInList()
                 is FilterRegionViewState.ListOfRegionIsEmpty -> setStateListOfRegionIsEmpty()
                 is FilterRegionViewState.ListOfRegion -> setStateListOfRegion(it.listOfRegion)
@@ -110,6 +110,18 @@ class FilterRegionFragment : Fragment() {
             regionPlaceholderMessage.text = this@FilterRegionFragment.getString(R.string.no_region)
             Glide.with(this@FilterRegionFragment)
                 .load(R.drawable.placeholder_cat)
+                .centerCrop()
+                .into(regionPlaceholderImage)
+        }
+    }
+
+    private fun setStateNoInternetConnection() {
+        binding.apply {
+            regionRecyclerView.isVisible = false
+            regionPlaceholderLayout.isVisible = true
+            regionPlaceholderMessage.text = this@FilterRegionFragment.getString(R.string.no_internet_connection)
+            Glide.with(this@FilterRegionFragment)
+                .load(R.drawable.placeholder_skull)
                 .centerCrop()
                 .into(regionPlaceholderImage)
         }
