@@ -26,11 +26,8 @@ class IndustryFragment : Fragment() {
     private var _binding: FragmentIndustryBinding? = null
     private val binding get() = _binding!!
     private var selectedIndustry: IndustryDomain? = null
-    private val adapter = IndustryAdapter {
-        selectedIndustry = it
-        hideKeyboard()
-        viewModel.selectIndustry()
-    }
+    private var adapter: IndustryAdapter? = null
+
     private val viewModel: IndustryViewModel by viewModel()
     private var allIndustries: List<IndustryDomain>? = null
     private val activityViewModel: ActivityViewModel by activityViewModels()
@@ -47,6 +44,12 @@ class IndustryFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        adapter = IndustryAdapter(activityViewModel.industry.value) {
+            selectedIndustry = it
+            hideKeyboard()
+            viewModel.selectIndustry()
+        }
 
         binding.industryRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.industryRecyclerView.adapter = adapter
@@ -67,9 +70,9 @@ class IndustryFragment : Fragment() {
             binding.industryInput.setText("")
             binding.iconIndustryClear.isVisible = false
             binding.iconIndustrySearch.isVisible = true
-            adapter.selectedIndustry = null
-            adapter.industriesList.clear()
-            adapter.notifyDataSetChanged()
+            adapter!!.selectedIndustry = null
+            adapter!!.industriesList.clear()
+            adapter!!.notifyDataSetChanged()
         }
 
         binding.industryApplyButton.setOnClickListener {
@@ -127,9 +130,9 @@ class IndustryFragment : Fragment() {
 
             is FiltrationIndustryState.Success -> {
                 allIndustries = data.industriesList
-                adapter.industriesList.clear()
-                adapter.industriesList = data.industriesList.toMutableList()
-                adapter.notifyDataSetChanged()
+                adapter!!.industriesList.clear()
+                adapter!!.industriesList = data.industriesList.toMutableList()
+                adapter!!.notifyDataSetChanged()
             }
 
             FiltrationIndustryState.Empty -> {
