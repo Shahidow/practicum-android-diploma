@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.presentation.filtration.place.country
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +12,7 @@ import ru.practicum.android.diploma.util.SERVER_ERROR
 
 class FilterCountryViewModel(private val interactor: FiltrationInteractor) : ViewModel() {
 
-    private val tag: String = "filter_country"
+    private val tag = "filter"
     private val _filtrationParams = MutableLiveData<FilterCountryViewState>()
     val filtrationParams: LiveData<FilterCountryViewState> get() = _filtrationParams
 
@@ -23,11 +24,13 @@ class FilterCountryViewModel(private val interactor: FiltrationInteractor) : Vie
             } else if (result.resultCode != null) {
                 when (result.resultCode) {
                     SERVER_ERROR -> {
-                        // ошибка сервера
+                        Log.e(tag, "server error")
+                        _filtrationParams.postValue(FilterCountryViewState.EmptyCountryList)
                     }
 
                     INTERNET_ERROR -> {
-                        // нет интернета
+                        Log.e(tag, "enternet error")
+                        _filtrationParams.postValue(FilterCountryViewState.NoInternetConnection)
                     }
                 }
             }
