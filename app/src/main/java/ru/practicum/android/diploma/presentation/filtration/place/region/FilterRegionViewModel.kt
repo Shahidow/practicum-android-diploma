@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.presentation.filtration.place.region
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,6 +15,7 @@ class FilterRegionViewModel(private val interactor: FiltrationInteractor) : View
 
     private val _filterRegionState = MutableLiveData<FilterRegionViewState>()
     val filterRegionState: LiveData<FilterRegionViewState> get() = _filterRegionState
+    private val tag = "filter"
 
     private var regionList = listOf<AreaDomain>()
     fun searchRegionInList(text: String) {
@@ -47,11 +49,13 @@ class FilterRegionViewModel(private val interactor: FiltrationInteractor) : View
             } else if (result.resultCode != null) {
                 when (result.resultCode) {
                     SERVER_ERROR -> {
-                        // ошибка сервера
+                        _filterRegionState.postValue(FilterRegionViewState.ListOfRegionIsEmpty)
+                        Log.e(tag, "список пуст")
                     }
 
                     INTERNET_ERROR -> {
-                        // нет интернета
+                        _filterRegionState.postValue(FilterRegionViewState.NoInternetConnection)
+                        Log.e(tag, "нет интернета")
                     }
                 }
             }
