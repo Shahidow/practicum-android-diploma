@@ -26,7 +26,7 @@ class FiltrationInteractorImpl(private val repository: FiltrationRepository) : F
         return when (result.resultCode) {
             SUCCESS_CODE -> {
                 if (isCountry) {
-                    Resource.Success(result.data)
+                    Resource.Success(result.data?.filter { item -> item.id != COUNTRY_REGION_ID })
                 } else {
                     Resource.Success(result.data?.let { getRegions(it) })
                 }
@@ -43,7 +43,9 @@ class FiltrationInteractorImpl(private val repository: FiltrationRepository) : F
         areas.forEach { item ->
             regionList.addAll(item.areas)
         }
-        return regionList.sortedBy { it.name }
+        return regionList
+            .filter { item -> item.parentId != COUNTRY_REGION_ID }
+            .sortedBy { it.name }
     }
 
     private fun getDomainIndustries(industries: List<IndustryDomain>): List<IndustryDomain> {
@@ -52,5 +54,9 @@ class FiltrationInteractorImpl(private val repository: FiltrationRepository) : F
             industriesList.addAll(item.industryList)
         }
         return industriesList.sortedBy { it.name }
+    }
+
+    companion object {
+        private const val COUNTRY_REGION_ID = "1001"
     }
 }
