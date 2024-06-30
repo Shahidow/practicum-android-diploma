@@ -99,7 +99,12 @@ class FilterCountryFragment : Fragment() {
     }
 
     private fun onItemRegionClick(area: AreaDomain) {
-        activityViewModel.country.value = area
+        if (area == activityViewModel.country.value) {
+            activityViewModel.country.value = area
+        } else {
+            activityViewModel.country.value = area
+            activityViewModel.region.value = null
+        }
         findNavController().navigateUp()
     }
 

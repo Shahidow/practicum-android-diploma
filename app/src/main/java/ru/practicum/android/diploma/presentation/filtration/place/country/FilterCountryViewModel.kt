@@ -18,7 +18,7 @@ class FilterCountryViewModel(private val interactor: FiltrationInteractor) : Vie
 
     fun getCountryList() {
         viewModelScope.launch {
-            val result = interactor.getAreas(true)
+            val result = interactor.getAreas()
             if (result.data != null) {
                 _filtrationParams.postValue(FilterCountryViewState.CountryList(result.data))
             } else if (result.resultCode != null) {
