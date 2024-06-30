@@ -15,9 +15,12 @@ class FilterRegionViewModel(private val interactor: FiltrationInteractor) : View
 
     private val _filterRegionState = MutableLiveData<FilterRegionViewState>()
     val filterRegionState: LiveData<FilterRegionViewState> get() = _filterRegionState
+    private val _countryState = MutableLiveData<AreaDomain>()
+    val countryState: LiveData<AreaDomain> get() = _countryState
     private val tag = "filter"
-
+    private var countryList = listOf<AreaDomain>()
     private var regionList = listOf<AreaDomain>()
+
     fun searchRegionInList(text: String) {
         if (regionList.isNotEmpty()) {
             if (text != "") {
@@ -37,9 +40,10 @@ class FilterRegionViewModel(private val interactor: FiltrationInteractor) : View
 
     fun getRegions(parentId: String?) {
         viewModelScope.launch {
-            val result = interactor.getAreas(false)
+            val result = interactor.getAreas()
             if (result.data != null) {
-                regionList = result.data
+                regionList = getRegions(result.data)
+                countryList = result.data
                 if (parentId != null) {
                     regionList = filterRegions(parentId, regionList)
                     _filterRegionState.postValue(FilterRegionViewState.ListOfRegion(regionList))
@@ -58,6 +62,22 @@ class FilterRegionViewModel(private val interactor: FiltrationInteractor) : View
                         Log.e(tag, "нет интернета")
                     }
                 }
+            }
+        }
+    }
+
+    private fun getRegions(areas: List<AreaDomain>): List<AreaDomain> {
+        val regionList = mutableListOf<AreaDomain>()
+        areas.forEach { item ->
+            regionList.addAll(item.areas)
+        }
+        return regionList.sortedBy { it.name }
+    }
+
+    fun getCountryById(countryId: String?) {
+        countryList.forEach { item ->
+            if (item.id == countryId) {
+                _countryState.postValue(item)
             }
         }
     }

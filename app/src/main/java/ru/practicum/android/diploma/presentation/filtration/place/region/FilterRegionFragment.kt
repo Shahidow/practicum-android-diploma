@@ -53,6 +53,9 @@ class FilterRegionFragment : Fragment() {
         filterRegionViewModel.getRegions(parentId)
         adapter = FilterPlaceAdapter(onItemRegionClick = { area -> onItemRegionClick(area) })
         binding.regionRecyclerView.adapter = adapter
+        filterRegionViewModel.countryState.observe(viewLifecycleOwner) {
+            activityViewModel.country.value = it
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -128,6 +131,7 @@ class FilterRegionFragment : Fragment() {
     }
 
     private fun onItemRegionClick(area: AreaDomain) {
+        filterRegionViewModel.getCountryById(area.parentId)
         activityViewModel.region.value = area
         findNavController().navigateUp()
     }
