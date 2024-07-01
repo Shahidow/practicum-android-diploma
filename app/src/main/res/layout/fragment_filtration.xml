@@ -101,8 +101,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/industryContainer"
         android:layout_width="0dp"
-        android:layout_height="@dimen/height_60"
+        android:layout_height="wrap_content"
         android:background="?attr/colorSecondary"
+        android:minHeight="@dimen/height_60"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/workplaceContainer">
@@ -110,10 +111,9 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/filtrationIndustryInputLayout"
             android:layout_width="0dp"
-            android:layout_height="@dimen/height_60"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="36dp"
             android:background="?attr/colorSecondary"
-            android:ellipsize="end"
             android:hint="@string/industry"
             android:imeOptions="actionDone|flagNoExtractUi"
             android:textAlignment="viewStart"
@@ -126,23 +126,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <EditText
                 android:id="@+id/filtrationIndustryEditText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clickable="true"
-                android:ellipsize="end"
                 android:focusable="false"
                 android:fontFamily="@font/ys_display_regular"
-                android:inputType="textCapSentences"
-                android:lines="1"
-                android:singleLine="true"
+                android:inputType="textMultiLine"
                 android:textAlignment="viewStart"
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="@dimen/text_size_16"
                 tools:ignore="VisualLintTextFieldSize" />
         </com.google.android.material.textfield.TextInputLayout>
-
 
         <ImageView
             android:id="@+id/industryArrowForward"
@@ -154,7 +150,7 @@
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/filtrationIndustryInputLayout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/filtrationIndustryInputLayout"  />
+            app:layout_constraintTop_toTopOf="@+id/filtrationIndustryInputLayout" />
 
         <ImageView
             android:id="@+id/industryClear"
