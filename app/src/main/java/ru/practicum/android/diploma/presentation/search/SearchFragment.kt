@@ -60,6 +60,14 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
             }
         }
 
+        searchViewModel.filterButtonHighlight.observe(viewLifecycleOwner) { isHighlighted ->
+            if (isHighlighted) {
+                binding.filterButton.setImageResource(R.drawable.baseline_filter_on_24)
+            } else {
+                binding.filterButton.setImageResource(R.drawable.baseline_filter_24)
+            }
+        }
+
         binding.iconClear.setOnClickListener {
             binding.searchInput.setText("")
             searchViewModel.clearSearchResults()

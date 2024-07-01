@@ -18,4 +18,8 @@ class FiltrationParamsSaveInteractorImpl(
     override fun removeFilterParams() {
         filtrationParamsSaveRepository.removeFilterParams()
     }
+
+    override fun hasActiveFilters(): Boolean {
+        return filtrationParamsSaveRepository.hasActiveFilters()
+    }
 }
