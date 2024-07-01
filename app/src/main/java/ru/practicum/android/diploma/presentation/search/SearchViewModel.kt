@@ -26,9 +26,19 @@ class SearchViewModel(
     private var maxPages: Int = 0
     private var vacanciesList = mutableListOf<DomainVacancy>()
     private var isNextPageLoading: Boolean = false
+    private var filterButtonHighlighted = MutableLiveData<Boolean>()
+    val filterButtonHighlight: LiveData<Boolean> = filterButtonHighlighted
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
+    }
+
+    init {
+        checkActiveFilters()
+    }
+
+    private fun checkActiveFilters() {
+        filterButtonHighlighted.postValue(filtersInteractor.hasActiveFilters())
     }
 
     fun searchDebounce(text: String) {
@@ -104,5 +114,6 @@ class SearchViewModel(
         } else {
             searchState.postValue(SearchState.Success(vacanciesList, searchInteractor.foundItems!!))
         }
+        checkActiveFilters()
     }
 }

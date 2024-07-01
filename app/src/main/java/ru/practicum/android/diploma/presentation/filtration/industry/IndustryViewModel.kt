@@ -87,6 +87,6 @@ class IndustryViewModel(
     }
 
     companion object {
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val SEARCH_DEBOUNCE_DELAY = 500L
     }
 }
