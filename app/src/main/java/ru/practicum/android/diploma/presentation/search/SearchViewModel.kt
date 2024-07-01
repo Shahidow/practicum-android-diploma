@@ -98,9 +98,11 @@ class SearchViewModel(
     }
 
     fun onResume() {
-        IsLastPage.IS_LAST_PAGE = true
-        currentPage = 0
-        vacanciesList.clear()
-        searchText?.let { searchVacancy(it) }
+        if (vacanciesList.isEmpty()) {
+            currentPage = 0
+            searchText?.let { searchVacancy(it) }
+        } else {
+            searchState.postValue(SearchState.Success(vacanciesList, searchInteractor.foundItems!!))
+        }
     }
 }
