@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.presentation.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
@@ -17,14 +18,15 @@ class SearchViewModel(
     private val debounce: Debounce,
     private val searchInteractor: SearchInteractor,
     private val filtersInteractor: FiltrationParamsSaveInteractor,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private var searchText: String? = null
+    private var searchText: String? = savedStateHandle.get<String>("searchText")
     private var searchState = MutableLiveData<SearchState>()
     val trackListLiveData: LiveData<SearchState> = searchState
-    private var currentPage: Int = 0
-    private var maxPages: Int = 0
-    private var vacanciesList = mutableListOf<DomainVacancy>()
+    private var currentPage: Int = savedStateHandle.get<Int>("currentPage") ?: 0
+    private var maxPages: Int = savedStateHandle.get<Int>("maxPages") ?: 0
+    private var vacanciesList: MutableList<DomainVacancy> = savedStateHandle["vacanciesList"] ?: mutableListOf()
     private var isNextPageLoading: Boolean = false
     private var filterButtonHighlighted = MutableLiveData<Boolean>()
     val filterButtonHighlight: LiveData<Boolean> = filterButtonHighlighted
@@ -35,10 +37,22 @@ class SearchViewModel(
 
     init {
         checkActiveFilters()
+        if (vacanciesList.isNotEmpty()) {
+            searchState.postValue(SearchState.Success(vacanciesList, searchInteractor.foundItems ?: 0))
+        } else if (!searchText.isNullOrEmpty()) {
+            searchVacancy(searchText!!)
+        }
     }
 
     private fun checkActiveFilters() {
         filterButtonHighlighted.postValue(filtersInteractor.hasActiveFilters())
+    }
+
+    private fun saveState() {
+        savedStateHandle["searchText"] = searchText
+        savedStateHandle["currentPage"] = currentPage
+        savedStateHandle["maxPages"] = maxPages
+        savedStateHandle["vacanciesList"] = vacanciesList
     }
 
     fun searchDebounce(text: String) {
@@ -71,6 +85,7 @@ class SearchViewModel(
                 .searchVacancies(text, currentPage, filtersInteractor.getFilterParams())
                 .collect { pair -> processResult(pair.first, pair.second) }
             maxPages = searchInteractor.pages ?: 0
+            saveState()
         }
     }
 
@@ -81,6 +96,7 @@ class SearchViewModel(
             } else {
                 vacanciesList.addAll(vacancies)
                 searchState.postValue(SearchState.Success(vacanciesList, searchInteractor.foundItems!!))
+                saveState()
             }
         } else if (errorCode != null) {
             when (errorCode) {
@@ -108,12 +124,12 @@ class SearchViewModel(
     }
 
     fun onResume() {
+        checkActiveFilters()
         if (vacanciesList.isEmpty()) {
             currentPage = 0
             searchText?.let { searchVacancy(it) }
         } else {
             searchState.postValue(SearchState.Success(vacanciesList, searchInteractor.foundItems!!))
         }
-        checkActiveFilters()
     }
 }
