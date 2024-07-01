@@ -124,9 +124,12 @@ class SearchViewModel(
     }
 
     fun onResume() {
-        checkActiveFilters()
+      checkActiveFilters()
         if (vacanciesList.isEmpty()) {
+            currentPage = 0
             searchText?.let { searchVacancy(it) }
+        } else {
+            searchState.postValue(SearchState.Success(vacanciesList, searchInteractor.foundItems!!))
         }
     }
 }
