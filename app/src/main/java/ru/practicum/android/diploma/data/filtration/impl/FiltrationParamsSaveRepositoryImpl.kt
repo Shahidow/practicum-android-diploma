@@ -27,4 +27,10 @@ class FiltrationParamsSaveRepositoryImpl(
             .remove(FILTRATION_PARAMS_KEY)
             .apply()
     }
+
+    override fun hasActiveFilters(): Boolean {
+        val filters = getFilterParams()
+        return filters?.country != null || filters?.region != null || filters?.industry != null ||
+            filters?.salary != null || filters?.showOnlyWithSalary == true
+    }
 }

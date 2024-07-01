@@ -6,4 +6,5 @@ interface FiltrationParamsSaveRepository {
     fun getFilterParams(): FilterParams?
     fun saveFilterParams(filterParams: FilterParams)
     fun removeFilterParams()
+    fun hasActiveFilters(): Boolean
 }
