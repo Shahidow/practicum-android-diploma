@@ -18,7 +18,7 @@ class SearchViewModel(
     private val debounce: Debounce,
     private val searchInteractor: SearchInteractor,
     private val filtersInteractor: FiltrationParamsSaveInteractor,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private var searchText: String? = savedStateHandle.get<String>("searchText")
@@ -79,7 +79,6 @@ class SearchViewModel(
         } else {
             searchState.postValue(SearchState.Loading)
         }
-
         viewModelScope.launch {
             searchInteractor
                 .searchVacancies(text, currentPage, filtersInteractor.getFilterParams())
@@ -124,6 +123,7 @@ class SearchViewModel(
     }
 
     fun onResume() {
+        IsLastPage.IS_LAST_PAGE = true
         checkActiveFilters()
         if (vacanciesList.isEmpty()) {
             currentPage = 0

@@ -85,12 +85,29 @@ class FiltrationFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun afterTextChanged(s: Editable?) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (binding.expectedSalaryEditText.isFocused) {
+                    binding.salaryClearImageView.isVisible = !s.isNullOrEmpty()
+                } else {
+                    binding.salaryClearImageView.isVisible = false
+                }
                 compareFilters()
                 resetButtonVisibility()
             }
         })
 
-        binding.noSalaryCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.expectedSalaryEditText.setOnFocusChangeListener { _, hashFocus ->
+            if(hashFocus && binding.expectedSalaryEditText.text.toString().isNotEmpty()) {
+                binding.salaryClearImageView.isVisible = true
+            } else {
+                binding.salaryClearImageView.isVisible = false
+            }
+        }
+
+        binding.salaryClearImageView.setOnClickListener {
+            binding.expectedSalaryEditText.setText("")
+        }
+
+        binding.noSalaryCheckBox.setOnCheckedChangeListener { _, _ ->
             compareFilters()
             resetButtonVisibility()
         }
