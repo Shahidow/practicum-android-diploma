@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.filtration.FiltrationParamsSaveInteractor
+import ru.practicum.android.diploma.domain.filtration.models.FilterParams
 import ru.practicum.android.diploma.domain.search.SearchInteractor
 import ru.practicum.android.diploma.domain.search.models.DomainVacancy
 import ru.practicum.android.diploma.util.Debounce
@@ -30,16 +31,27 @@ class SearchViewModel(
     private var isNextPageLoading: Boolean = false
     private var filterButtonHighlighted = MutableLiveData<Boolean>()
     val filterButtonHighlight: LiveData<Boolean> = filterButtonHighlighted
+    private var filterParams: FilterParams? = null
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
     init {
+        filterParams = filtersInteractor.getFilterParams()
         checkActiveFilters()
         if (vacanciesList.isNotEmpty()) {
             searchState.postValue(SearchState.Success(vacanciesList, searchInteractor.foundItems ?: 0))
         } else if (!searchText.isNullOrEmpty()) {
+            searchVacancy(searchText!!)
+        }
+    }
+
+    fun updateFilters(filters: FilterParams) {
+        if (filterParams != filters && !searchText.isNullOrEmpty()) {
+            filterParams = filters
+            currentPage = 0
+            vacanciesList.clear()
             searchVacancy(searchText!!)
         }
     }
@@ -69,6 +81,9 @@ class SearchViewModel(
     }
 
     fun clearSearchResults() {
+        searchText = null
+        currentPage = 0
+        vacanciesList.clear()
         searchState.postValue(SearchState.Default)
     }
 
