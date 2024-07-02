@@ -11,7 +11,7 @@ import ru.practicum.android.diploma.domain.favorites.FavoritesVacancyViewState
 import java.io.IOException
 
 class FavoritesViewModel(private val favoritesVacancyInteractor: FavoritesVacancyInteractor) : ViewModel() {
-    private val teg = "favorites"
+    private val tag = "favorites"
     private val _favoriteVacancyScreenState = MutableLiveData<FavoritesVacancyViewState>()
     val favoriteVacancyScreenState: LiveData<FavoritesVacancyViewState> get() = _favoriteVacancyScreenState
     fun getAllFavoritesVacancy() {
@@ -34,7 +34,7 @@ class FavoritesViewModel(private val favoritesVacancyInteractor: FavoritesVacanc
                         )
                     }
                 } catch (e: IOException) {
-                    Log.e(teg, "Caught exception:  ${e.message}")
+                    Log.e(tag, "Caught exception:  ${e.message}")
                     _favoriteVacancyScreenState.postValue(
                         FavoritesVacancyViewState.FavoritesVacancyError
                     )
@@ -44,4 +44,3 @@ class FavoritesViewModel(private val favoritesVacancyInteractor: FavoritesVacanc
 
     }
 }
-

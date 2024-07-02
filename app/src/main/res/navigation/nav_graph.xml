@@ -9,21 +9,21 @@
         android:id="@+id/favoritesFragment"
         android:name="ru.practicum.android.diploma.presentation.favorites.FavoritesFragment"
         android:label="fragment_favorites"
-        tools:layout="@layout/fragment_favorites" >
+        tools:layout="@layout/fragment_favorites">
         <action
             android:id="@+id/action_favoritesFragment_to_vacancyFragment"
             app:destination="@id/vacancyFragment" />
     </fragment>
     <fragment
         android:id="@+id/filterCountryFragment"
-        android:name="ru.practicum.android.diploma.presentation.filtration.place.FilterCountryFragment"
+        android:name="ru.practicum.android.diploma.presentation.filtration.place.country.FilterCountryFragment"
         android:label="fragment_filter_country"
         tools:layout="@layout/fragment_filter_country" />
     <fragment
         android:id="@+id/filterPlaceFragment"
         android:name="ru.practicum.android.diploma.presentation.filtration.place.FilterPlaceFragment"
         android:label="fragment_filter_place"
-        tools:layout="@layout/fragment_filter_place" >
+        tools:layout="@layout/fragment_filter_place">
         <action
             android:id="@+id/action_filterPlaceFragment_to_filterCountryFragment"
             app:destination="@id/filterCountryFragment" />
@@ -33,14 +33,14 @@
     </fragment>
     <fragment
         android:id="@+id/filterRegionFragment"
-        android:name="ru.practicum.android.diploma.presentation.filtration.place.FilterRegionFragment"
+        android:name="ru.practicum.android.diploma.presentation.filtration.place.region.FilterRegionFragment"
         android:label="fragment_filter_region"
         tools:layout="@layout/fragment_filter_region" />
     <fragment
         android:id="@+id/filtrationFragment"
         android:name="ru.practicum.android.diploma.presentation.filtration.FiltrationFragment"
         android:label="fragment_filtration"
-        tools:layout="@layout/fragment_filtration" >
+        tools:layout="@layout/fragment_filtration">
         <action
             android:id="@+id/action_filtrationFragment_to_filterPlaceFragment"
             app:destination="@id/filterPlaceFragment" />
@@ -57,7 +57,7 @@
         android:id="@+id/searchFragment"
         android:name="ru.practicum.android.diploma.presentation.search.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
+        tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_searchFragment_to_filtrationFragment"
             app:destination="@id/filtrationFragment" />

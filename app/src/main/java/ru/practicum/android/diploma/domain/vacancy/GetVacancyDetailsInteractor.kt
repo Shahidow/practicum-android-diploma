@@ -1,28 +1,32 @@
 package ru.practicum.android.diploma.domain.vacancy
 
-import retrofit2.HttpException
 import ru.practicum.android.diploma.data.vacancy.VacancyRepository
 import ru.practicum.android.diploma.domain.search.models.DomainVacancy
-import java.io.IOException
+import ru.practicum.android.diploma.util.INTERNET_ERROR
+import ru.practicum.android.diploma.util.Resource
+import ru.practicum.android.diploma.util.SERVER_ERROR
+import ru.practicum.android.diploma.util.SUCCESS_CODE
 
 class GetVacancyDetailsInteractor(private val repository: VacancyRepository) {
 
-    suspend fun execute(vacancyId: String): Result<DomainVacancy> {
-        return try {
-            val response = repository.getVacancyDetails(vacancyId)
-            if (response.resultCode == SUCCESS_CODE) {
-                response.data?.let { Result.success(it) } ?: Result.failure(Exception("Invalid data format"))
-            } else {
-                Result.failure(Exception(response.errorMessage))
+    suspend fun execute(vacancyId: String): Resource<DomainVacancy> {
+        val result = repository.getVacancyDetails(vacancyId)
+        return when (result.resultCode) {
+            SUCCESS_CODE -> {
+                Resource.Success(result.data)
             }
-        } catch (e: IOException) {
-            Result.failure(Exception("Network error: ${e.message}"))
-        } catch (e: HttpException) {
-            Result.failure(Exception("HTTP error: ${e.message}"))
-        }
-    }
 
-    companion object {
-        private const val SUCCESS_CODE = 200
+            INTERNET_ERROR -> {
+                Resource.Error(result.resultCode)
+            }
+
+            SERVER_ERROR -> {
+                Resource.Error(result.resultCode)
+            }
+
+            else -> {
+                Resource.Error(result.resultCode)
+            }
+        }
     }
 }

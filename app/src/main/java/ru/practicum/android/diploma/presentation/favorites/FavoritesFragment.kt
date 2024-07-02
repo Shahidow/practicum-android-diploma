@@ -40,14 +40,14 @@ class FavoritesFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
         binding.favoriteRecyclerView.adapter = favoriteVacancyAdapter
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     override fun onResume() {
         super.onResume()
         vm.getAllFavoritesVacancy()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     fun observeViewState() {

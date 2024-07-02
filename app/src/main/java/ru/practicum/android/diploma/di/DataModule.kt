@@ -13,6 +13,10 @@ import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.db.VacancyConverter
 import ru.practicum.android.diploma.data.favorites.FavoritesVacancyRepository
 import ru.practicum.android.diploma.data.favorites.impl.FavoritesVacancyRepositoryImpl
+import ru.practicum.android.diploma.data.filtration.FiltrationParamsSaveRepository
+import ru.practicum.android.diploma.data.filtration.FiltrationRepository
+import ru.practicum.android.diploma.data.filtration.impl.FiltrationParamsSaveRepositoryImpl
+import ru.practicum.android.diploma.data.filtration.impl.FiltrationRepositoryImpl
 import ru.practicum.android.diploma.data.network.HeadHunterApi
 import ru.practicum.android.diploma.data.network.HeadHunterNetworkClient
 import ru.practicum.android.diploma.data.network.HeadHunterRetrofitNetworkClient
@@ -73,4 +77,11 @@ val dataModule = module {
 
     factory { VacancyConverter() }
 
+    single<FiltrationParamsSaveRepository> {
+        FiltrationParamsSaveRepositoryImpl(get())
+    }
+
+    single<FiltrationRepository> {
+        FiltrationRepositoryImpl(get(), get())
+    }
 }
