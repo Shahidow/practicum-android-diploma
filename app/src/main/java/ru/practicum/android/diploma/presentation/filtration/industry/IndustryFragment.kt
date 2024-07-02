@@ -27,7 +27,6 @@ class IndustryFragment : Fragment() {
     private val binding get() = _binding!!
     private var selectedIndustry: IndustryDomain? = null
     private var adapter: IndustryAdapter? = null
-
     private val viewModel: IndustryViewModel by viewModel()
     private var allIndustries: List<IndustryDomain>? = null
     private val activityViewModel: ActivityViewModel by activityViewModels()
@@ -36,12 +35,12 @@ class IndustryFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentIndustryBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -53,7 +52,6 @@ class IndustryFragment : Fragment() {
 
         binding.industryRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.industryRecyclerView.adapter = adapter
-
         viewModel.getIndustries()
 
         viewModel.getState().observe(viewLifecycleOwner) {
@@ -68,11 +66,6 @@ class IndustryFragment : Fragment() {
 
         binding.iconIndustryClear.setOnClickListener {
             binding.industryInput.setText("")
-            binding.iconIndustryClear.isVisible = false
-            binding.iconIndustrySearch.isVisible = true
-            adapter!!.selectedIndustry = null
-            adapter!!.industriesList.clear()
-            adapter!!.notifyDataSetChanged()
         }
 
         binding.industryApplyButton.setOnClickListener {
@@ -83,20 +76,12 @@ class IndustryFragment : Fragment() {
 
     private fun textWatcherListener() = object : TextWatcher {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            binding.iconIndustryClear.isVisible = binding.industryInput.text.toString().isNotEmpty()
-            binding.iconIndustrySearch.isVisible = binding.industryInput.text.toString().isEmpty()
-
-            if (binding.industryInput.text.toString().isNotEmpty()) {
-                viewModel.searchDebounce(s.toString())
-            } else {
-                hideKeyboard()
-                viewModel.getIndustries()
-            }
-        }
-
         override fun afterTextChanged(p0: Editable?) = Unit
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            binding.iconIndustryClear.isVisible = !s.isNullOrEmpty()
+            binding.iconIndustrySearch.isVisible = s.isNullOrEmpty()
+            viewModel.filterIndustries(s.toString())
+        }
     }
 
     private fun hideKeyboard() {
@@ -108,6 +93,7 @@ class IndustryFragment : Fragment() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun processIndustryState(data: FiltrationIndustryState) {
         binding.industryPlaceholderLayout.isVisible = data is FiltrationIndustryState.ServerError ||
             data is FiltrationIndustryState.InternetConnectionError ||
@@ -143,11 +129,6 @@ class IndustryFragment : Fragment() {
 
             else -> {}
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.getIndustries()
     }
 
     override fun onDestroyView() {

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.search.models.DomainVacancy
+import ru.practicum.android.diploma.ui.root.ActivityViewModel
 import ru.practicum.android.diploma.util.VACANCY_KEY
 
 class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
@@ -26,6 +28,7 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private var vacancyAdapter: VacancyAdapter? = null
+    private val activityViewModel: ActivityViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +49,9 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        searchTextChangedListener()
+        searchRecyclerOnScrollListener()
+        activityViewModel.filters.observe(viewLifecycleOwner) { searchViewModel.updateFilters(it) }
         searchViewModel.trackListLiveData.observe(viewLifecycleOwner) {
             when (it) {
                 is SearchState.NoInternet -> setStateNetworkError()
@@ -73,6 +79,15 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
             searchViewModel.clearSearchResults()
         }
 
+        vacancyAdapter = VacancyAdapter()
+        vacancyAdapter?.setInItemVacancyClickListener(this)
+        binding.searchRecyclerView.adapter = vacancyAdapter
+        binding.filterButton.setOnClickListener {
+            findNavController().navigate(R.id.action_searchFragment_to_filtrationFragment)
+        }
+    }
+
+    private fun searchTextChangedListener() {
         binding.searchInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
             override fun afterTextChanged(p0: Editable?) = Unit
@@ -82,14 +97,9 @@ class SearchFragment : Fragment(), VacancyAdapter.ItemVacancyClickInterface {
                 searchViewModel.searchDebounce(s.toString())
             }
         })
+    }
 
-        vacancyAdapter = VacancyAdapter()
-        vacancyAdapter?.setInItemVacancyClickListener(this)
-        binding.searchRecyclerView.adapter = vacancyAdapter
-        binding.filterButton.setOnClickListener {
-            findNavController().navigate(R.id.action_searchFragment_to_filtrationFragment)
-        }
-
+    private fun searchRecyclerOnScrollListener() {
         binding.searchRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
