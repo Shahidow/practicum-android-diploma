@@ -39,30 +39,44 @@ class FiltrationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         observeChanges()
+        setWorkPlace()
+        setIndustry()
         binding.resetButton.setOnClickListener { clearFilters() }
         binding.applyButton.setOnClickListener { saveFilters() }
+        binding.filtrationBackImageView.setOnClickListener { findNavController().navigateUp() }
 
-        binding.filtrationBackImageView.setOnClickListener {
-            findNavController().navigateUp()
-        }
-        binding.filtrationWorkplaceEditText.setOnClickListener {
-            findNavController().navigate(R.id.action_filtrationFragment_to_filterPlaceFragment)
-        }
-        binding.filtrationIndustryEditText.setOnClickListener {
-            findNavController().navigate(R.id.action_filtrationFragment_to_industryFragment)
-        }
-
-        binding.filtrationIndustryEditText.addTextChangedListener(object : TextWatcher {
+        binding.expectedSalaryEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun afterTextChanged(s: Editable?) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.industryArrowForward.isVisible = s.isNullOrEmpty()
-                binding.industryClear.isVisible = !s.isNullOrEmpty()
+                if (binding.expectedSalaryEditText.isFocused) {
+                    binding.salaryClearImageView.isVisible = !s.isNullOrEmpty()
+                } else {
+                    binding.salaryClearImageView.isVisible = false
+                }
+                compareFilters()
+                resetButtonVisibility()
             }
         })
 
-        binding.industryClear.setOnClickListener {
-            activityViewModel.industry.value = null
+        binding.expectedSalaryEditText.setOnFocusChangeListener { _, hashFocus ->
+            if (hashFocus && binding.expectedSalaryEditText.text.toString().isNotEmpty()) {
+                binding.salaryClearImageView.isVisible = true
+            } else {
+                binding.salaryClearImageView.isVisible = false
+            }
+        }
+
+        binding.salaryClearImageView.setOnClickListener { binding.expectedSalaryEditText.setText("") }
+        binding.noSalaryCheckBox.setOnCheckedChangeListener { _, _ ->
+            compareFilters()
+            resetButtonVisibility()
+        }
+    }
+
+    private fun setWorkPlace() {
+        binding.filtrationWorkplaceEditText.setOnClickListener {
+            findNavController().navigate(R.id.action_filtrationFragment_to_filterPlaceFragment)
         }
 
         binding.filtrationWorkplaceEditText.addTextChangedListener(object : TextWatcher {
@@ -80,19 +94,23 @@ class FiltrationFragment : Fragment() {
             activityViewModel.country.value = null
             activityViewModel.region.value = null
         }
+    }
 
-        binding.expectedSalaryEditText.addTextChangedListener(object : TextWatcher {
+    private fun setIndustry() {
+        binding.filtrationIndustryEditText.setOnClickListener {
+            findNavController().navigate(R.id.action_filtrationFragment_to_industryFragment)
+        }
+        binding.filtrationIndustryEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun afterTextChanged(s: Editable?) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                compareFilters()
-                resetButtonVisibility()
+                binding.industryArrowForward.isVisible = s.isNullOrEmpty()
+                binding.industryClear.isVisible = !s.isNullOrEmpty()
             }
         })
 
-        binding.noSalaryCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
-            compareFilters()
-            resetButtonVisibility()
+        binding.industryClear.setOnClickListener {
+            activityViewModel.industry.value = null
         }
     }
 
@@ -207,6 +225,7 @@ class FiltrationFragment : Fragment() {
             binding.expectedSalaryEditText.text.toString().toIntOrNull(),
             binding.noSalaryCheckBox.isChecked
         )
+        activityViewModel.filters.value = filters
         viewModel.setData(filters)
         findNavController().navigateUp()
     }
